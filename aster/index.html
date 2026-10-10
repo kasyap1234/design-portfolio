@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Aster &amp; Vine — Seasonal stems, arranged like it matters</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,300;1,9..144,400;1,9..144,500&family=Source+Sans+3:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+<style>
+/* ============================================================
+   ASTER & VINE — warm editorial florist
+   palette: linen cream · deep forest · terracotta
+   ============================================================ */
+:root{
+  --paper:      #F4EEE0;
+  --paper-deep: #ECE3CF;
+  --card:       #FBF7EC;
+  --forest:     #24402E;
+  --forest-deep:#182B1F;
+  --ink:        #33392B;
+  --ink-soft:   #5C6149;
+  --terra:      #C05F3C;
+  --terra-soft: #D4886A;
+  --terra-deep: #9E4A2E;
+  --sage:       #A9B294;
+  --butter:     #E4C584;
+  --wine:       #7E4240;
+  --kraft:      #D9C49B;
+  --line:       #DCD0B6;
+  --line-dark:  rgba(36,64,46,.18);
+  --serif: "Fraunces", Georgia, serif;
+  --sans:  "Source Sans 3", "Segoe UI", sans-serif;
+  --ease:  cubic-bezier(.22,.61,.36,1);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--sans);
+  font-size:17px; line-height:1.6;
+  color:var(--ink);
+  background:var(--paper);
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+::selection{background:var(--terra);color:var(--card)}
+img,svg{display:block}
+a{color:inherit;text-decoration:none}
+button{font:inherit;cursor:pointer;border:none;background:none;color:inherit}
+
+/* paper grain overlay */
+body::after{
+  content:"";position:fixed;inset:0;z-index:90;pointer-events:none;
+  opacity:.55;mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/><feComponentTransfer><feFuncA type='table' tableValues='0 0.045'/></feComponentTransfer></filter><rect width='180' height='180' filter='url(%23n)'/></svg>");
+}
+
+.container{width:min(1160px, calc(100% - 48px));margin-inline:auto}
+
+/* ---------- type helpers ---------- */
+.eyebrow{
+  font-size:.72rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--terra);margin-bottom:1.1rem;display:flex;align-items:center;gap:.7rem;
+}
+.eyebrow::before{content:"";width:26px;height:1px;background:var(--terra)}
+.eyebrow.center{justify-content:center}
+.eyebrow.center::after{content:"";width:26px;height:1px;background:var(--terra)}
+h1,h2,h3{font-family:var(--serif);font-weight:400;color:var(--forest);line-height:1.06}
+h2{font-size:clamp(2.1rem,4vw,3.1rem);letter-spacing:-.01em}
+h2 em, h1 em{font-style:italic;font-weight:300}
+
+/* ============================================================
+   ANNOUNCEMENT BAR — slow marquee
+   ============================================================ */
+.announce{background:var(--forest);color:var(--paper);overflow:hidden;font-size:.78rem;letter-spacing:.14em;text-transform:uppercase}
+.announce-track{display:flex;width:max-content;animation:marquee 42s linear infinite}
+.announce:hover .announce-track{animation-play-state:paused}
+.announce-track span{padding:.62rem 0;display:flex;align-items:center;white-space:nowrap}
+.announce-track i{font-style:normal;color:var(--butter);margin:0 2.2rem;font-size:.9em}
+@keyframes marquee{to{transform:translateX(-50%)}}
+
+/* ============================================================
+   HEADER
+   ============================================================ */
+header.site{
+  background:var(--paper);
+  border-bottom:1px solid var(--line);
+  position:sticky;top:0;z-index:50;
+}
+.header-in{display:flex;align-items:center;justify-content:space-between;gap:2rem;padding:1.05rem 0}
+.wordmark{font-family:var(--serif);font-size:1.55rem;font-weight:500;color:var(--forest);letter-spacing:.01em;white-space:nowrap}
+.wordmark em{font-style:italic;color:var(--terra);font-weight:300;padding:0 .05em}
+nav.main{display:flex;gap:2.4rem}
+nav.main a{
+  font-size:.82rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-soft);
+  padding:.3rem 0;position:relative;transition:color .3s;
+}
+nav.main a::after{
+  content:"";position:absolute;left:0;bottom:0;width:100%;height:1px;background:var(--terra);
+  transform:scaleX(0);transform-origin:right;transition:transform .35s var(--ease);
+}
+nav.main a:hover{color:var(--forest)}
+nav.main a:hover::after{transform:scaleX(1);transform-origin:left}
+.cart{
+  display:flex;align-items:center;gap:.55rem;
+  font-size:.82rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--forest);
+  padding:.45rem .95rem;border:1px solid var(--line-dark);border-radius:999px;
+  transition:border-color .3s, background .3s;
+}
+.cart:hover{border-color:var(--forest);background:rgba(36,64,46,.05)}
+.cart .count{
+  min-width:1.35rem;height:1.35rem;border-radius:999px;background:var(--terra);color:var(--card);
+  display:grid;place-items:center;font-size:.72rem;font-weight:700;transition:transform .3s var(--ease);
+}
+.cart .count.pop{transform:scale(1.35)}
+
+/* ============================================================
+   HERO
+   ============================================================ */
+.hero{position:relative;overflow:hidden}
+.hero-grid{
+  display:grid;grid-template-columns:1.05fr .95fr;gap:4rem;align-items:center;
+  padding:5.5rem 0 6.5rem;
+}
+.hero-copy{max-width:34rem}
+.hero h1{
+  font-size:clamp(2.9rem,5.6vw,4.7rem);
+  letter-spacing:-.015em;margin-bottom:1.6rem;
+}
+.hero h1 .u{
+  position:relative;white-space:nowrap;font-style:italic;font-weight:300;
+  background:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='140' height='14' viewBox='0 0 140 14'><path d='M3 9 C 26 3, 52 13, 78 8 S 118 3, 137 8' fill='none' stroke='%23C05F3C' stroke-width='3' stroke-linecap='round'/></svg>") bottom left / 100% .32rem no-repeat;
+  padding-bottom:.32rem;
+}
+.hero-sub{color:var(--ink-soft);font-size:1.08rem;max-width:29rem;margin-bottom:2.4rem}
+.hero-sub strong{color:var(--forest);font-weight:600}
+.cta-row{display:flex;align-items:center;gap:1.8rem;flex-wrap:wrap}
+.btn{
+  display:inline-flex;align-items:center;gap:.7rem;
+  background:var(--forest);color:var(--card);
+  font-size:.84rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+  padding:1.05rem 1.9rem;border-radius:999px;
+  transition:background .3s, transform .3s var(--ease), box-shadow .3s;
+}
+.btn svg{transition:transform .3s var(--ease)}
+.btn:hover{background:var(--terra-deep);transform:translateY(-2px);box-shadow:0 12px 26px -12px rgba(158,74,46,.55)}
+.btn:hover svg{transform:translateX(4px)}
+.btn:focus-visible, .link-arrow:focus-visible, .card button:focus-visible, .cart:focus-visible, .news-form button:focus-visible{
+  outline:2px solid var(--terra);outline-offset:3px;
+}
+.link-arrow{
+  font-size:.84rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--forest);
+  display:inline-flex;align-items:center;gap:.5rem;
+  border-bottom:1px solid var(--line-dark);padding-bottom:.25rem;transition:border-color .3s,color .3s;
+}
+.link-arrow:hover{color:var(--terra);border-color:var(--terra)}
+.hero-meta{
+  display:flex;gap:2.4rem;margin-top:3.4rem;padding-top:1.6rem;border-top:1px solid var(--line);
+}
+.hero-meta div{font-size:.8rem;color:var(--ink-soft);letter-spacing:.04em}
+.hero-meta strong{display:block;font-family:var(--serif);font-size:1.35rem;font-weight:500;color:var(--forest);letter-spacing:0}
+
+/* --- hero visual : composed bouquet in an arch --- */
+.hero-visual{position:relative;width:min(430px,88vw);margin-inline:auto}
+.arch{
+  position:relative;width:100%;height:560px;
+  border-radius:215px 215px 26px 26px;overflow:hidden;
+  background:linear-gradient(180deg,#EFE4C9 0%,#E6D7B4 52%,#DBC79E 100%);
+  box-shadow:0 40px 70px -40px rgba(51,57,43,.45), inset 0 0 0 1px rgba(255,252,240,.5);
+}
+.arch::before{
+  content:"";position:absolute;inset:0;
+  background:radial-gradient(circle at 50% 16%,rgba(255,250,232,.95),transparent 58%);
+}
+.arch::after{ /* inner hairline arch trace */
+  content:"";position:absolute;inset:14px;border:1px solid rgba(36,64,46,.22);
+  border-radius:200px 200px 18px 18px;pointer-events:none;
+}
+.sprig{position:absolute;color:var(--forest);opacity:.5}
+.sprig-l{left:9%;top:16%;width:54px;transform:rotate(-14deg)}
+.sprig-r{right:9%;top:13%;width:60px;transform:scaleX(-1) rotate(-12deg)}
+.sprig *{stroke:currentColor}
+
+.bouquet{position:absolute;inset:0}
+.stem{
+  position:absolute;bottom:30%;left:50%;width:2.5px;height:52%;
+  background:linear-gradient(#2E4B33,#54704A);
+  transform-origin:50% 100%;border-radius:2px;margin-left:-1.25px;
+  transform:rotate(var(--r,0deg));
+}
+.stem::after{ /* small leaf on each stem */
+  content:"";position:absolute;top:38%;left:50%;width:22px;height:11px;
+  border-radius:50% 50% 50% 50%/60% 60% 40% 40%;
+  background:linear-gradient(120deg,#6E8559,#4C6440);
+  transform:translateX(2px) rotate(28deg) scale(var(--ls,1));
+}
+.stem:nth-child(even)::after{left:auto;right:50%;transform:translateX(-2px) rotate(-28deg) scale(var(--ls,1))}
+
+/* petals — shared by hero blooms + card minis */
+.bloom{position:absolute;width:var(--size);aspect-ratio:1;z-index:2}
+.bloom .petal{
+  position:absolute;left:50%;top:50%;width:36%;height:54%;
+  margin:-54% 0 0 -18%;transform-origin:50% 100%;
+  border-radius:50% 50% 46% 46%/64% 64% 36% 36%;
+  background:linear-gradient(to top,var(--pc2),var(--pc1));
+  box-shadow:inset 0 -6px 10px -6px rgba(70,35,20,.35);
+}
+.bloom .petal:nth-child(1){transform:rotate(0deg)}
+.bloom .petal:nth-child(2){transform:rotate(45deg)}
+.bloom .petal:nth-child(3){transform:rotate(90deg)}
+.bloom .petal:nth-child(4){transform:rotate(135deg)}
+.bloom .petal:nth-child(5){transform:rotate(180deg)}
+.bloom .petal:nth-child(6){transform:rotate(225deg)}
+.bloom .petal:nth-child(7){transform:rotate(270deg)}
+.bloom .petal:nth-child(8){transform:rotate(315deg)}
+.bloom-in{position:absolute;inset:19%;transform:rotate(22.5deg)}
+.bloom-in .petal{background:linear-gradient(to top,var(--pc1),var(--pc3))}
+.heart{
+  position:absolute;left:50%;top:50%;width:24%;aspect-ratio:1;z-index:3;
+  transform:translate(-50%,-50%);border-radius:50%;
+  background:radial-gradient(circle at 38% 32%,var(--hc1),var(--hc2) 70%);
+  box-shadow:0 0 0 3px rgba(60,30,15,.08), inset 0 -3px 6px rgba(60,30,15,.3);
+}
+/* bloom colourways */
+.terra {--pc1:#D78B63;--pc2:#B4552F;--pc3:#E8B492;--hc1:#EBCB88;--hc2:#7A3B24}
+.cream {--pc1:#F4E9CF;--pc2:#D9C294;--pc3:#FBF4E2;--hc1:#E2B96B;--hc2:#8A5A28}
+.blush {--pc1:#E9BBA6;--pc2:#C97F66;--pc3:#F4D4C5;--hc1:#F0CE8C;--hc2:#8A4A2E}
+.butter{--pc1:#EFD08B;--pc2:#D2A94F;--pc3:#F7E4B0;--hc1:#A9673A;--hc2:#5E3A20}
+.wine  {--pc1:#A05B57;--pc2:#6E3534;--pc3:#C08580;--hc1:#E4C584;--hc2:#5E2A28}
+.green {--pc1:#8FA276;--pc2:#5F7450;--pc3:#B3C29C;--hc1:#E4C584;--hc2:#4A5A3A}
+
+/* paper wrap cone */
+.wrap{
+  position:absolute;left:50%;bottom:7%;width:60%;height:37%;z-index:4;
+  transform:translateX(-50%);
+  clip-path:polygon(3% 0,97% 0,76% 100%,24% 100%);
+  background:linear-gradient(115deg,#E3D0A9 0%,#CBAF7F 52%,#B89A6B 100%);
+}
+.wrap::before{ /* overlapping paper fold */
+  content:"";position:absolute;inset:0;
+  clip-path:polygon(3% 0,58% 0,52% 100%,24% 100%);
+  background:linear-gradient(115deg,#EADBB8,#D2BA8C);
+}
+.wrap::after{ /* fold crease */
+  content:"";position:absolute;top:0;bottom:0;left:55%;width:1px;
+  background:rgba(90,66,36,.35);transform:rotate(6deg);
+}
+.twine{position:absolute;top:38%;left:0;right:0;height:8px;background:#8A6647;z-index:5}
+.twine::before{
+  content:"";position:absolute;left:50%;top:50%;width:15px;height:15px;border-radius:50%;
+  transform:translate(-50%,-50%);background:#7A5639;box-shadow:0 1px 2px rgba(0,0,0,.3);
+}
+.twine::after{ /* loose string ends */
+  content:"";position:absolute;left:calc(50% + 8px);top:6px;width:34px;height:26px;
+  border-right:2.5px solid #8A6647;border-bottom:2.5px solid #8A6647;
+  border-radius:0 0 14px 0;transform:rotate(14deg);
+}
+.ground{
+  position:absolute;bottom:3.5%;left:50%;width:74%;height:26px;z-index:1;
+  transform:translateX(-50%);border-radius:50%;
+  background:radial-gradient(ellipse at center,rgba(51,57,43,.32),transparent 70%);
+  filter:blur(2px);
+}
+
+/* rotating stamp badge */
+.stamp{
+  position:absolute;top:36px;right:-16px;width:112px;height:112px;z-index:6;
+  background:var(--card);border-radius:50%;
+  box-shadow:0 14px 30px -14px rgba(51,57,43,.4), inset 0 0 0 1px var(--line);
+  display:grid;place-items:center;
+}
+.stamp svg{position:absolute;inset:8px;animation:spin 24s linear infinite}
+.stamp text{font-family:var(--sans);font-size:8px;font-weight:700;letter-spacing:1.6px;fill:var(--terra);text-transform:uppercase}
+.stamp .dot{
+  width:38px;height:38px;border-radius:50%;background:var(--forest);color:var(--butter);
+  display:grid;place-items:center;font-size:19px;font-family:var(--serif);font-style:italic;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+.hero-note{
+  position:absolute;bottom:-4px;left:50%;transform:translate(-50%,50%);
+  background:var(--card);border:1px solid var(--line);border-radius:999px;
+  padding:.55rem 1.3rem;font-size:.8rem;letter-spacing:.06em;color:var(--ink-soft);white-space:nowrap;
+  box-shadow:0 12px 26px -16px rgba(51,57,43,.4);
+}
+.hero-note i{font-style:normal;color:var(--terra);margin:0 .45rem}
+
+/* ============================================================
+   THIS WEEK'S STEMS
+   ============================================================ */
+.stems{padding:7rem 0 6rem;position:relative}
+.stems .bg-sprig{position:absolute;right:0;top:60px;width:230px;color:var(--sage);opacity:.28;transform:rotate(12deg);pointer-events:none}
+.sec-head{
+  display:flex;align-items:flex-end;justify-content:space-between;gap:3rem;
+  margin-bottom:3.6rem;padding-bottom:1.8rem;border-bottom:1px solid var(--line);
+}
+.sec-note{max-width:21rem;font-size:.92rem;color:var(--ink-soft);text-align:right;padding-bottom:.4rem}
+.sec-note em{color:var(--terra);font-style:italic;font-family:var(--serif);font-size:1.02rem}
+
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:2.2rem}
+.card{
+  background:var(--card);border:1px solid var(--line);border-radius:20px;overflow:hidden;
+  transition:transform .45s var(--ease), box-shadow .45s var(--ease);
+  display:flex;flex-direction:column;
+}
+.card:hover{transform:translateY(-8px);box-shadow:0 32px 50px -30px rgba(51,57,43,.4)}
+.card-visual{position:relative;height:235px;overflow:hidden}
+.theme-a{background:linear-gradient(160deg,#F3E3CB,#EAD2AE)}
+.theme-b{background:linear-gradient(160deg,#E8E9D4,#D5DAB7)}
+.theme-c{background:linear-gradient(160deg,#F0E2D5,#E2C8B2)}
+.card-visual .sprig{opacity:.45}
+.card-visual .sprig-l{left:8%;top:12%;width:40px}
+.card-visual .sprig-r{right:8%;top:10%;width:44px}
+.mini{position:absolute;left:0;bottom:0;width:100%;height:100%}
+.mini .stem{bottom:16%;height:62%}
+.mini .wrap{width:46%;height:34%;bottom:4%}
+.mini .twine{top:34%;height:6px}
+.mini .twine::before{width:11px;height:11px}
+.mini .twine::after{width:22px;height:16px;left:calc(50% + 6px);border-width:2px}
+.mini .ground{bottom:2%;width:60%;height:18px}
+.card-tag{
+  position:absolute;top:14px;left:14px;z-index:6;
+  font-size:.68rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;
+  background:var(--card);color:var(--forest);border:1px solid var(--line);
+  padding:.32rem .8rem;border-radius:999px;
+}
+.card-tag.terra{color:var(--card);background:var(--terra);border-color:var(--terra)}
+.card-body{padding:1.5rem 1.6rem 1.7rem;display:flex;flex-direction:column;gap:.5rem;flex:1}
+.card-row{display:flex;align-items:baseline;justify-content:space-between;gap:1rem}
+.card h3{font-size:1.55rem;font-weight:500}
+.price{font-family:var(--serif);font-size:1.3rem;font-style:italic;color:var(--terra)}
+.palette{font-size:.9rem;color:var(--ink-soft);font-style:italic;flex:1}
+.add{
+  margin-top:.9rem;align-self:stretch;
+  font-size:.78rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--forest);border:1px solid var(--line-dark);border-radius:999px;padding:.75rem 1rem;
+  transition:background .3s,color .3s,border-color .3s;
+}
+.add:hover{background:var(--forest);color:var(--card);border-color:var(--forest)}
+.add.added{background:var(--terra);border-color:var(--terra);color:var(--card)}
+
+/* ============================================================
+   SUBSCRIPTIONS
+   ============================================================ */
+.subs{
+  background:var(--forest);color:var(--paper);padding:6.5rem 0;position:relative;overflow:hidden;
+}
+.subs::before{ /* faint large sprig, right side */
+  content:"";position:absolute;right:-90px;bottom:-60px;width:420px;height:420px;border-radius:50%;
+  border:1px solid rgba(244,238,224,.14);
+}
+.subs::after{
+  content:"";position:absolute;right:-20px;bottom:-20px;width:300px;height:300px;border-radius:50%;
+  border:1px dashed rgba(244,238,224,.12);
+}
+.subs-inner{display:grid;grid-template-columns:.9fr 1.1fr;gap:5rem;align-items:center;position:relative;z-index:2}
+.subs .eyebrow{color:var(--butter)}
+.subs .eyebrow::before{background:var(--butter)}
+.subs h2{color:var(--paper);margin-bottom:1.4rem}
+.subs h2 em{color:var(--terra-soft)}
+.subs-copy>p{color:rgba(244,238,224,.78);max-width:27rem;margin-bottom:2rem}
+.subs-list{list-style:none;display:flex;flex-direction:column;gap:.75rem}
+.subs-list li{display:flex;gap:.8rem;align-items:center;font-size:.95rem;color:rgba(244,238,224,.85)}
+.subs-list li::before{
+  content:"";width:17px;height:17px;border-radius:50%;flex:none;
+  background:var(--terra) url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'><path d='M2.5 6.2 5 8.5 9.5 3.8' fill='none' stroke='%23FBF7EC' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/></svg>") center/11px no-repeat;
+}
+.plans{display:grid;grid-template-columns:1fr 1fr;gap:1.6rem}
+.plan{
+  background:rgba(251,247,236,.06);border:1px solid rgba(244,238,224,.2);
+  border-radius:18px;padding:2.2rem 2rem;position:relative;
+  transition:transform .4s var(--ease), border-color .4s, background .4s;
+}
+.plan:hover{transform:translateY(-6px);border-color:rgba(244,238,224,.45);background:rgba(251,247,236,.1)}
+.plan.featured{background:var(--card);color:var(--ink);border-color:var(--card)}
+.plan.featured:hover{border-color:var(--butter)}
+.plan-tag{
+  position:absolute;top:-13px;left:50%;transform:translateX(-50%);
+  background:var(--terra);color:var(--card);font-size:.66rem;font-weight:700;
+  letter-spacing:.18em;text-transform:uppercase;padding:.35rem .9rem;border-radius:999px;white-space:nowrap;
+}
+.plan h3{font-size:1.4rem;font-weight:500;color:inherit;margin-bottom:.2rem}
+.plan.featured h3{color:var(--forest)}
+.plan-cadence{font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;color:rgba(244,238,224,.6);margin-bottom:1.2rem}
+.plan.featured .plan-cadence{color:var(--ink-soft)}
+.plan-price{font-family:var(--serif);font-size:2.6rem;color:var(--paper);line-height:1;margin-bottom:1.3rem}
+.plan.featured .plan-price{color:var(--forest)}
+.plan-price span{font-size:1rem;font-style:italic;color:rgba(244,238,224,.55);font-family:var(--sans);font-style:normal}
+.plan.featured .plan-price span{color:var(--ink-soft)}
+.plan ul{list-style:none;display:flex;flex-direction:column;gap:.55rem;margin-bottom:1.8rem;font-size:.88rem;color:rgba(244,238,224,.8)}
+.plan.featured ul{color:var(--ink-soft)}
+.plan ul li{display:flex;gap:.6rem}
+.plan ul li::before{content:"—";color:var(--terra-soft)}
+.plan.featured ul li::before{color:var(--terra)}
+.plan .btn{width:100%;justify-content:center;padding:.9rem 1rem;font-size:.78rem}
+.plan .btn.ghost{background:transparent;border:1px solid rgba(244,238,224,.4);color:var(--paper)}
+.plan .btn.ghost:hover{background:rgba(244,238,224,.12);box-shadow:none;border-color:var(--paper)}
+.subs-foot{margin-top:2.6rem;font-size:.82rem;color:rgba(244,238,224,.55);letter-spacing:.05em;text-align:center;grid-column:1/-1}
+.subs-foot em{color:var(--butter)}
+
+/* ============================================================
+   JOURNAL
+   ============================================================ */
+.journal{padding:7rem 0 6.5rem}
+.journal-grid{display:grid;grid-template-columns:.85fr 2fr;gap:4.5rem;align-items:start}
+.journal h2{margin-bottom:1.4rem}
+.journal-head p{color:var(--ink-soft);font-size:.95rem;max-width:18rem;margin-bottom:1.8rem}
+.entries{border-top:1px solid var(--line)}
+.entry{
+  display:grid;grid-template-columns:110px 1fr auto;gap:1.8rem;align-items:center;
+  padding:1.6rem .4rem;border-bottom:1px solid var(--line);
+  transition:background .3s,padding .3s var(--ease);
+}
+.entry:hover{background:rgba(251,247,236,.9);padding-left:1rem}
+.entry .date{font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft)}
+.entry .date b{display:block;font-family:var(--serif);font-size:1.5rem;font-weight:500;color:var(--forest);letter-spacing:0}
+.entry h3{font-size:1.45rem;font-weight:500;transition:color .3s}
+.entry:hover h3{color:var(--terra)}
+.entry .kicker{display:block;font-family:var(--sans);font-size:.75rem;letter-spacing:.18em;text-transform:uppercase;color:var(--terra);margin-bottom:.3rem;font-weight:700}
+.entry .arrow{
+  width:44px;height:44px;border:1px solid var(--line-dark);border-radius:50%;
+  display:grid;place-items:center;color:var(--forest);
+  transition:background .3s,color .3s,transform .3s var(--ease);
+}
+.entry:hover .arrow{background:var(--forest);color:var(--card);transform:rotate(-35deg)}
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+footer.site{background:var(--forest-deep);color:rgba(244,238,224,.8);padding:4.5rem 0 0}
+.foot-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1.3fr;gap:3.5rem;padding-bottom:3.5rem}
+.foot-brand .wordmark{color:var(--paper);font-size:1.8rem;display:inline-block;margin-bottom:1rem}
+.foot-brand p{font-size:.92rem;max-width:20rem;color:rgba(244,238,224,.62)}
+.foot-brand .social{display:flex;gap:1.4rem;margin-top:1.4rem;font-size:.78rem;letter-spacing:.14em;text-transform:uppercase}
+.foot-brand .social a{border-bottom:1px solid rgba(244,238,224,.3);padding-bottom:.2rem;transition:color .3s,border-color .3s}
+.foot-brand .social a:hover{color:var(--butter);border-color:var(--butter)}
+footer h4{
+  font-family:var(--sans);font-size:.72rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--butter);margin-bottom:1.3rem;
+}
+.foot-col ul{list-style:none;display:flex;flex-direction:column;gap:.6rem;font-size:.92rem}
+.foot-col a{color:rgba(244,238,224,.72);transition:color .3s}
+.foot-col a:hover{color:var(--paper)}
+.hours li{display:flex;justify-content:space-between;gap:1rem;max-width:15rem}
+.hours li span:last-child{color:rgba(244,238,224,.5)}
+.hours li.closed span{color:var(--terra-soft)}
+.newsletter p{font-size:.9rem;color:rgba(244,238,224,.62);margin-bottom:1.1rem}
+.news-form{display:flex;border:1px solid rgba(244,238,224,.3);border-radius:999px;overflow:hidden;background:rgba(244,238,224,.05)}
+.news-form input{
+  flex:1;min-width:0;background:transparent;border:none;padding:.85rem 1.2rem;color:var(--paper);
+  font:inherit;font-size:.9rem;outline:none;
+}
+.news-form input::placeholder{color:rgba(244,238,224,.4)}
+.news-form button{
+  background:var(--terra);color:var(--card);padding:.85rem 1.5rem;
+  font-size:.78rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;
+  transition:background .3s;
+}
+.news-form button:hover{background:var(--terra-deep)}
+.news-form.done{border-color:var(--butter)}
+.news-note{font-size:.75rem;color:rgba(244,238,224,.4);margin-top:.7rem;letter-spacing:.04em}
+.foot-bar{
+  border-top:1px solid rgba(244,238,224,.14);padding:1.4rem 0;
+  display:flex;justify-content:space-between;align-items:center;gap:1.5rem;flex-wrap:wrap;
+  font-size:.78rem;color:rgba(244,238,224,.45);letter-spacing:.06em;
+}
+.foot-bar .links{display:flex;gap:1.8rem}
+.foot-bar a:hover{color:var(--paper)}
+.foot-bar em{color:var(--butter)}
+
+/* ============================================================
+   MOTION / REVEAL
+   ============================================================ */
+.reveal{opacity:0;transform:translateY(22px);transition:opacity .85s ease,transform .85s var(--ease)}
+.reveal.in{opacity:1;transform:none}
+.d1{transition-delay:.12s}.d2{transition-delay:.24s}.d3{transition-delay:.36s}
+
+@media (prefers-reduced-motion:reduce){
+  .announce-track{animation:none}
+  .stamp svg{animation:none}
+  .reveal{opacity:1;transform:none;transition:none}
+  *{transition-duration:.01ms!important}
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width:1020px){
+  .hero-grid{grid-template-columns:1fr;gap:4.5rem;padding:4rem 0 6rem}
+  .hero-copy{max-width:38rem}
+  .subs-inner{grid-template-columns:1fr;gap:3.5rem}
+  .journal-grid{grid-template-columns:1fr;gap:2.5rem}
+  .journal-head p{max-width:30rem}
+  .foot-grid{grid-template-columns:1fr 1fr;gap:2.5rem}
+}
+@media (max-width:760px){
+  .header-in{flex-wrap:wrap;gap:.8rem;padding:.9rem 0}
+  nav.main{order:3;width:100%;justify-content:center;gap:1.8rem;border-top:1px solid var(--line);padding-top:.7rem}
+  .cards{grid-template-columns:1fr;max-width:430px;margin-inline:auto}
+  .plans{grid-template-columns:1fr;max-width:400px;margin-inline:auto}
+  .sec-head{flex-direction:column;align-items:flex-start;gap:1rem}
+  .sec-note{text-align:left}
+  .hero-meta{flex-wrap:wrap;gap:1.4rem}
+  .entry{grid-template-columns:1fr auto;gap:.4rem 1.4rem}
+  .entry .date{grid-column:1/-1;display:flex;align-items:baseline;gap:.7rem}
+  .entry .date b{font-size:1.1rem}
+  .hero-note{font-size:.72rem}
+  .stamp{width:88px;height:88px;top:16px;right:-10px}
+  .stamp .dot{width:30px;height:30px;font-size:15px}
+}
+@media (max-width:480px){
+  .arch{height:480px}
+  .foot-grid{grid-template-columns:1fr}
+}
+</style>
+<noscript><style>.reveal{opacity:1;transform:none}</style></noscript>
+</head>
+<body>
+
+<!-- ======================= ANNOUNCEMENT ======================= -->
+<div class="announce" role="note">
+  <div class="announce-track" id="announceTrack">
+    <span>Same-day delivery in the metro — order by 2&nbsp;pm<i>❋</i>Wrapped in paper, never plastic<i>❋</i>Cut Thursday morning, at your door by dusk<i>❋</i>Same-day delivery in the metro — order by 2&nbsp;pm<i>❋</i>Wrapped in paper, never plastic<i>❋</i>Cut Thursday morning, at your door by dusk<i>❋</i></span>
+    <span aria-hidden="true">Same-day delivery in the metro — order by 2&nbsp;pm<i>❋</i>Wrapped in paper, never plastic<i>❋</i>Cut Thursday morning, at your door by dusk<i>❋</i>Same-day delivery in the metro — order by 2&nbsp;pm<i>❋</i>Wrapped in paper, never plastic<i>❋</i>Cut Thursday morning, at your door by dusk<i>❋</i></span>
+  </div>
+</div>
+
+<!-- ======================= HEADER ======================= -->
+<header class="site">
+  <div class="container header-in">
+    <a class="wordmark" href="#">Aster <em>&amp;</em> Vine</a>
+    <nav class="main" aria-label="Primary">
+      <a href="#shop">Shop</a>
+      <a href="#subscriptions">Subscriptions</a>
+      <a href="#journal">Journal</a>
+    </nav>
+    <button class="cart" id="cartBtn" aria-label="Cart, 2 items">
+      Cart <span class="count" id="cartCount">2</span>
+    </button>
+  </div>
+</header>
+
+<main>
+<!-- ======================= HERO ======================= -->
+<section class="hero">
+  <div class="container hero-grid">
+    <div class="hero-copy">
+      <p class="eyebrow">Boutique florist · small-batch · est. 2019</p>
+      <h1>Seasonal stems,<br><em>arranged like it <span class="u">matters.</span></em></h1>
+      <p class="hero-sub">We cut a short list of bunches each week — <strong>whatever the farms are proud of right now</strong> — wrapped in kraft paper, tied with twine, and delivered the same day.</p>
+      <div class="cta-row">
+        <a class="btn" href="#shop">Shop this week
+          <svg width="15" height="12" viewBox="0 0 15 12" fill="none"><path d="M1 6h12M9 1.5 13.5 6 9 10.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <a class="link-arrow" href="#subscriptions">See subscriptions →</a>
+      </div>
+      <div class="hero-meta">
+        <div><strong>34</strong>weekly cutting lists</div>
+        <div><strong>60 mi</strong>average farm distance</div>
+        <div><strong>0</strong>bunches cold-stored</div>
+      </div>
+    </div>
+
+    <div class="hero-visual reveal">
+      <div class="arch" role="img" aria-label="A paper-wrapped bouquet of terracotta, cream and butter garden blooms">
+        <!-- line-art sprigs -->
+        <svg class="sprig sprig-l" viewBox="0 0 60 160" fill="none" aria-hidden="true">
+          <path d="M30 156 C 26 112, 36 70, 28 14" stroke-width="1.4" stroke-linecap="round"/>
+          <path d="M29 122 C 19 114, 13 102, 14 90 C 23 98, 28 108, 29 122 Z" stroke-width="1.2"/>
+          <path d="M31 96 C 41 88, 47 76, 46 64 C 37 72, 32 82, 31 96 Z" stroke-width="1.2"/>
+          <path d="M28 62 C 18 54, 12 42, 13 30 C 22 38, 27 48, 28 62 Z" stroke-width="1.2"/>
+          <circle cx="28" cy="14" r="2.6" fill="currentColor" stroke="none"/>
+          <circle cx="23" cy="22" r="2" fill="currentColor" stroke="none"/>
+          <circle cx="33" cy="23" r="2" fill="currentColor" stroke="none"/>
+        </svg>
+        <svg class="sprig sprig-r" viewBox="0 0 60 160" fill="none" aria-hidden="true">
+          <path d="M30 156 C 26 112, 36 70, 28 14" stroke-width="1.4" stroke-linecap="round"/>
+          <path d="M29 122 C 19 114, 13 102, 14 90 C 23 98, 28 108, 29 122 Z" stroke-width="1.2"/>
+          <path d="M31 96 C 41 88, 47 76, 46 64 C 37 72, 32 82, 31 96 Z" stroke-width="1.2"/>
+          <path d="M28 62 C 18 54, 12 42, 13 30 C 22 38, 27 48, 28 62 Z" stroke-width="1.2"/>
+          <circle cx="28" cy="14" r="2.6" fill="currentColor" stroke="none"/>
+          <circle cx="23" cy="22" r="2" fill="currentColor" stroke="none"/>
+          <circle cx="33" cy="23" r="2" fill="currentColor" stroke="none"/>
+        </svg>
+
+        <!-- composed bouquet -->
+        <div class="bouquet">
+          <div class="stem" style="--r:-18deg;--ls:.8"></div>
+          <div class="stem" style="--r:-9deg"></div>
+          <div class="stem" style="--r:-2deg;--ls:1.15"></div>
+          <div class="stem" style="--r:8deg;--ls:.9"></div>
+          <div class="stem" style="--r:17deg"></div>
+
+          <div class="bloom terra" style="--size:158px;left:26%;top:7%">
+            <i class="petal"></i><i class="petal"></i><i class="petal"></i><i class="petal"></i>
+            <i class="petal"></i><i class="petal"></i><i class="petal"></i><i class="petal"></i>
+            <div class="bloom-in">
+              <i class="petal"></i><i class="petal"></i><i class="petal"></i><i class="petal"></i>
+              <i class="petal"></i><i class="petal"></i><i class="petal"></i><i class="petal"></i>
+            </div>
+            <div class="heart"></div>
+          </div>
+          <div class="bloom cream" style="--size:120px;left:55%;top:4%">
+            <i class="petal"></i><i class="petal"></i><i class="petal"></i><i class="petal"></i>
+            <i class="petal"></i><i class="petal"></i><i class="petal"></i><i class="petal"></i>
+            <div class="bloom-in">
+              <i class="petal"></i><i class="petal"></i><i class="petal"></i><i class="petal"></i>
+              <i class="petal"></i><i class="petal"></i><i class="petal"></i><i class="petal"></i>
+            </div>
+            <div class="heart"></div>
+          </div>
+          <div class="bloom blush" style="--size:104px;left:9%;top:23%">
+            <i class="petal"></i><i class="petal"></i><i class="petal"></i><i class="petal"></i>
+            <i class="petal"></i><i class="petal"></i><i class="petal"></i><i class="petal"></i>
+            <div class="heart"></div>
+          </div>
+          <div class="bloom butter" style="--size:92px;left:64%;top:25%">
+            <i class="petal"></i><i class="petal"></i><i class="petal"></i><i class="petal"></i>
+            <i class="petal"></i><i class="petal"></i><i class="petal"></i><i class="petal"></i>
+            <div class="heart"></div>
+          </div>
+          <div class="bloom wine" style="--size:66px;left:42%;top:34%">
+            <i class="petal"></i><i class="petal"></i><i class="petal"></i><i class="petal"></i>
+            <i class="petal"></i><i class="petal"></i><i class="petal"></i><i class="petal"></i>
+            <div class="heart"></div>
+          </div>
+
+          <div class="wrap"><div class="twine"></div></div>
+          <div class="ground"></div>
+        </div>
+      </div>
+
+      <!-- rotating stamp -->
+      <div class="stamp" aria-hidden="true">
+        <svg viewBox="0 0 100 100">
+          <defs><path id="cir" d="M50,50 m-41,0 a41,41 0 1,1 82,0 a41,41 0 1,1 -82,0"/></defs>
+          <text><textPath href="#cir">Fresh cuts · small batch · Aster &amp; Vine ·</textPath></text>
+        </svg>
+        <div class="dot">a</div>
+      </div>
+
+      <p class="hero-note">Cut Thursday <i>❋</i> ranunculus · garden rose · beech</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= THIS WEEK'S STEMS ======================= -->
+<section class="stems" id="shop">
+  <svg class="bg-sprig" viewBox="0 0 60 160" fill="none" aria-hidden="true">
+    <path d="M30 156 C 26 112, 36 70, 28 14" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+    <path d="M29 122 C 19 114, 13 102, 14 90 C 23 98, 28 108, 29 122 Z" stroke="currentColor" stroke-width="1.2"/>
+    <path d="M31 96 C 41 88, 47 76, 46 64 C 37 72, 32 82, 31 96 Z" stroke="currentColor" stroke-width="1.2"/>
+    <path d="M28 62 C 18 54, 12 42, 13 30 C 22 38, 27 48, 28 62 Z" stroke="currentColor" stroke-width="1.2"/>
+  </svg>
+  <div class="container">
+    <div class="sec-head reveal">
+      <div>
+        <p class="eyebrow">The cutting list · no. 34</p>
+        <h2>This week's stems</h2>
+      </div>
+      <p class="sec-note">Cut Thursday morning, conditioned overnight, wrapped in paper — never plastic. <em>Limited bunches, gone by Sunday.</em></p>
+    </div>
+
+    <div class="cards">
+      <!-- card 1 -->
+      <article class="card reveal">
+        <div class="card-visual theme-a">
+          <span class="card-tag terra">Signature</span>
+          <svg class="sprig sprig-l" viewBox="0 0 60 160" fill="none" aria-hidden="true">
+            <path d="M30 156 C 26 112, 36 70, 28 14" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+            <path d="M29 122 C 19 114, 13 102, 14 90 C 23 98, 28 108, 29 122 Z" stroke-width="1.2"/>
+            <path d="M31 96 C 41 88, 47 76, 46 64 C 37 72, 32 82, 31 96 Z" stroke-width="1.2"/>
+          </svg>
+          <svg class="sprig sprig-r" viewBox="0 0 60 160" fill="none" aria-hidden="true">
+            <path d="M30 156 C 26 112, 36 70, 28 14" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+            <path d="M28 62 C 18 54, 12 42, 13 30 C 22 38, 27 48, 28 62 Z" stroke-width="1.2"/>
+            <circle cx="28" cy="14" r="2.6" fill="currentColor" stroke="none"/>
+          </svg>
+          <div class="mini">
+            <div class="stem" style="--r:-12deg;--ls:.8"></div>
+            <div class="stem" style="--r:0deg"></div>
+            <div class="stem" style="--r:12deg;--ls:.9"></div>
+            <div class="bloom terra" style="--size:88px;left:32%;top:16%">
+              <i class="petal"></i><i class="petal"></i><i class="petal"></i><i class="petal"></i>
+              <i class="petal"></i><i class="petal"></i><i class="petal"></i><i class="petal"></i>
+              <div class="bloom-in"><i class="petal"></i><i class="petal"></i><i class="petal"></i><i class="petal"></i><i class="petal"></i><i class="petal"></i><i class="petal"></i><i class="petal"></i></div>
+              <div class="heart"></div>
+            </div>
+            <div class="bloom cream" style="--size:56px;left:57%;top:12%">
+              <i class="petal"></i><i class="petal"></i><i class="petal"></i><i class="petal"></i>
+              <i class="petal"></i><i class="petal"></i><i class="petal"></i><i class="petal"></i>
+              <div class="heart"></div>
+            </div>
+            <div class="bloom butter" style="--size:44px;left:52%;top:34%">
+              <i class="petal"></i><i class="petal"></i><i class="petal"></i><i class="petal"></i>
+              <i class="petal"></i><i class="petal"></i><i class="petal"></i><i class="petal"></i>
+              <div class="heart"></div>
+            </div>
+            <div class="wrap"><div class="twine"></div></div>
+            <div class="ground"></div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="card-row"><h3>The Marlowe</h3><span class="price">$58</span></div>
+          <p class="palette">Terracotta ranunculus · cream stock · copper beech</p>
+          <button class="add" data-name="The Marlowe">Add to cart</button>
+        </div>
+      </article>
+
+      <!-- card 2 -->
+      <article class="card reveal d1">
+        <div class="card-visual theme-b">
+          <span class="card-tag">New this week</span>
+          <svg class="sprig sprig-l" viewBox="0 0 60 160" fill="none" aria-hidden="true">
+            <path d="M30 156 C 26 112, 36 70, 28 14" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+            <path d="M31 96 C 41 88, 47 76, 46 64 C 37 72, 32 82, 31 96 Z" stroke-width="1.2"/>
+            <circle cx="28" cy="14" r="2.6" fill="currentColor" stroke="none"/>
+          </svg>
+          <svg class="sprig sprig-r" viewBox="0 0 60 160" fill="none" aria-hidden="true">
+            <path d="M30 156 C 26 112, 36 70, 28 14" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+            <path d="M29 122 C 19 114, 13 102, 14 90 C 23 98, 28 108, 29 122 Z" stroke-width="1.2"/>
+          </svg>
+          <div class="mini">
+            <div class="stem" style="--r:-13deg"></div>
+            <div class="stem" style="--r:2deg;--ls:.8"></div>
+            <div class="stem" style="--r:13deg"></div>
+            <div class="bloom cream" style="--size:82px;left:36%;top:14%">
+              <i class="petal"></i><i class="petal"></i><i class="petal"></i><i class="petal"></i>
+              <i class="petal"></i><i class="petal"></i><i class="petal"></i><i class="petal"></i>
+              <div class="bloom-in"><i class="petal"></i><i class="petal"></i><i class="petal"></i><i class="petal"></i><i class="petal"></i><i class="petal"></i><i class="petal"></i><i class="petal"></i></div>
+              <div class="heart"></div>
+            </div>
+            <div class="bloom butter" style="--size:58px;left:58%;top:20%">
+              <i class="petal"></i><i class="petal"></i><i class="petal"></i><i class="petal"></i>
+              <i class="petal"></i><i class="petal"></i><i class="petal"></i><i class="petal"></i>
+              <div class="heart"></div>
+            </div>
+            <div class="bloom blush" style="--size:46px;left:23%;top:32%">
+              <i class="petal"></i><i class="petal"></i><i class="petal"></i><i class="petal"></i>
+              <i class="petal"></i><i class="petal"></i><i class="petal"></i><i class="petal"></i>
+              <div class="heart"></div>
+            </div>
+            <div class="wrap"><div class="twine"></div></div>
+            <div class="ground"></div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="card-row"><h3>Sweet Cicely</h3><span class="price">$44</span></div>
+          <p class="palette">Butterfly ranunculus · chamomile · trailing jasmine</p>
+          <button class="add" data-name="Sweet Cicely">Add to cart</button>
+        </div>
+      </article>
+
+      <!-- card 3 -->
+      <article class="card reveal d2">
+        <div class="card-visual theme-c">
+          <span class="card-tag">Only 6 left</span>
+          <svg class="sprig sprig-l" viewBox="0 0 60 160" fill="none" aria-hidden="true">
+            <path d="M30 156 C 26 112, 36 70, 28 14" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+            <path d="M28 62 C 18 54, 12 42, 13 30 C 22 38, 27 48, 28 62 Z" stroke-width="1.2"/>
+          </svg>
+          <svg class="sprig sprig-r" viewBox="0 0 60 160" fill="none" aria-hidden="true">
+            <path d="M30 156 C 26 112, 36 70, 28 14" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+            <path d="M29 122 C 19 114, 13 102, 14 90 C 23 98, 28 108, 29 122 Z" stroke-width="1.2"/>
+            <circle cx="28" cy="14" r="2.6" fill="currentColor" stroke="none"/>
+            <circle cx="33" cy="23" r="2" fill="currentColor" stroke="none"/>
+          </svg>
+          <div class="mini">
+            <div class="stem" style="--r:-11deg;--ls:.9"></div>
+            <div class="stem" style="--r:1deg"></div>
+            <div class="stem" style="--r:14deg;--ls:.8"></div>
+            <div class="bloom wine" style="--size:84px;left:34%;top:15%">
+              <i class="petal"></i><i class="petal"></i><i class="petal"></i><i class="petal"></i>
+              <i class="petal"></i><i class="petal"></i><i class="petal"></i><i class="petal"></i>
+              <div class="bloom-in"><i class="petal"></i><i class="petal"></i><i class="petal"></i><i class="petal"></i><i class="petal"></i><i class="petal"></i><i class="petal"></i><i class="petal"></i></div>
+              <div class="heart"></div>
+            </div>
+            <div class="bloom terra" style="--size:56px;left:58%;top:13%">
+              <i class="petal"></i><i class="petal"></i><i class="petal"></i><i class="petal"></i>
+              <i class="petal"></i><i class="petal"></i><i class="petal"></i><i class="petal"></i>
+              <div class="heart"></div>
+            </div>
+            <div class="bloom green" style="--size:42px;left:22%;top:33%">
+              <i class="petal"></i><i class="petal"></i><i class="petal"></i><i class="petal"></i>
+              <i class="petal"></i><i class="petal"></i><i class="petal"></i><i class="petal"></i>
+              <div class="heart"></div>
+            </div>
+            <div class="wrap"><div class="twine"></div></div>
+            <div class="ground"></div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="card-row"><h3>Hedgerow No. 9</h3><span class="price">$66</span></div>
+          <p class="palette">Blackberry scabiosa · garden rose 'Koko' · smoked foliage</p>
+          <button class="add" data-name="Hedgerow No. 9">Add to cart</button>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= SUBSCRIPTIONS ======================= -->
+<section class="subs" id="subscriptions">
+  <div class="container">
+    <div class="subs-inner">
+      <div class="subs-copy reveal">
+        <p class="eyebrow">Subscriptions</p>
+        <h2>The cutting garden,<br><em>delivered.</em></h2>
+        <p>A standing order with the season. Whatever is best that week — never a fixed recipe — cut the morning it ships and left on your doorstep by dusk.</p>
+        <ul class="subs-list">
+          <li>Grown within 60 miles of the shop</li>
+          <li>Pause, skip or gift a week anytime</li>
+          <li>Vase-care card tucked into every bunch</li>
+        </ul>
+      </div>
+      <div class="plans">
+        <article class="plan featured reveal d1">
+          <span class="plan-tag">Most loved</span>
+          <h3>The Weekly Bunch</h3>
+          <p class="plan-cadence">Every Friday</p>
+          <p class="plan-price">$38<span> / delivery</span></p>
+          <ul>
+            <li>10–12 stems, wrapped in kraft</li>
+            <li>Free same-day metro delivery</li>
+            <li>First pick of limited varieties</li>
+          </ul>
+          <a href="#" class="btn" data-plan="weekly">Start weekly</a>
+        </article>
+        <article class="plan reveal d2">
+          <h3>The Slow Bloom</h3>
+          <p class="plan-cadence">Every other Friday</p>
+          <p class="plan-price">$54<span> / delivery</span></p>
+          <ul>
+            <li>16–20 stems, a fuller gesture</li>
+            <li>Free same-day metro delivery</li>
+            <li>A dried stem keepsake included</li>
+          </ul>
+          <a href="#" class="btn ghost" data-plan="biweekly">Start biweekly</a>
+        </article>
+        <p class="subs-foot reveal d3">No commitment — cancel whenever. <em>Skip a week and we'll donate the bunch to the hospice on Willow St.</em></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= JOURNAL ======================= -->
+<section class="journal" id="journal">
+  <div class="container journal-grid">
+    <div class="journal-head reveal">
+      <p class="eyebrow">From the journal</p>
+      <h2>Notes from<br>the workbench</h2>
+      <p>Occasional writing on stems, seasons, and the slow business of keeping a flower shop.</p>
+      <a class="link-arrow" href="#">Read all entries →</a>
+    </div>
+    <div class="entries">
+      <a class="entry reveal" href="#">
+        <span class="date"><b>Oct 09</b>Field notes</span>
+        <div><span class="kicker">Drying season</span><h3>Why we leave the seed heads on</h3></div>
+        <span class="arrow"><svg width="15" height="12" viewBox="0 0 15 12" fill="none"><path d="M1 6h12M9 1.5 13.5 6 9 10.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      </a>
+      <a class="entry reveal d1" href="#">
+        <span class="date"><b>Oct 02</b>How-to</span>
+        <div><span class="kicker">Care</span><h3>The overnight rule: conditioning stems like a pro</h3></div>
+        <span class="arrow"><svg width="15" height="12" viewBox="0 0 15 12" fill="none"><path d="M1 6h12M9 1.5 13.5 6 9 10.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      </a>
+      <a class="entry reveal d2" href="#">
+        <span class="date"><b>Sep 25</b>Essay</span>
+        <div><span class="kicker">Shopkeeping</span><h3>A short history of the corner flower shop</h3></div>
+        <span class="arrow"><svg width="15" height="12" viewBox="0 0 15 12" fill="none"><path d="M1 6h12M9 1.5 13.5 6 9 10.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      </a>
+    </div>
+  </div>
+</section>
+</main>
+
+<!-- ======================= FOOTER ======================= -->
+<footer class="site">
+  <div class="container">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <a class="wordmark" href="#">Aster <em>&amp;</em> Vine</a>
+        <p>Small-batch seasonal arrangements, wrapped in paper and tied with twine. Cut to order, never cold-stored.</p>
+        <div class="social">
+          <a href="#">Instagram</a><a href="#">Pinterest</a>
+        </div>
+      </div>
+      <div class="foot-col">
+        <h4>Visit the shop</h4>
+        <ul>
+          <li>214 Willow Lane</li>
+          <li>Rosehill Quarter</li>
+          <li>hello@asterandvine.shop</li>
+          <li>(503) 555-0184</li>
+        </ul>
+      </div>
+      <div class="foot-col">
+        <h4>Hours</h4>
+        <ul class="hours">
+          <li><span>Tue – Sat</span><span>9 am – 6 pm</span></li>
+          <li><span>Sunday</span><span>10 am – 4 pm</span></li>
+          <li class="closed"><span>Monday</span><span>closed — we forage</span></li>
+        </ul>
+      </div>
+      <div class="foot-col newsletter">
+        <h4>The occasional letter</h4>
+        <p>Growing notes, first dibs on limited bunches, and what's blooming. About once a month.</p>
+        <form class="news-form" id="newsForm">
+          <input type="email" id="newsEmail" placeholder="your@email.com" required aria-label="Email address" />
+          <button type="submit">Join</button>
+        </form>
+        <p class="news-note">No noise, no discount spam — just stems.</p>
+      </div>
+    </div>
+    <div class="foot-bar">
+      <span>© <span id="year">2025</span> Aster &amp; Vine · <em>Arranged slowly in the Rosehill Quarter</em></span>
+      <span class="links"><a href="#">Delivery &amp; care</a><a href="#">Privacy</a><a href="#">Terms</a></span>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ---------- scroll reveal ---------- */
+const io = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+  });
+},{threshold:.14,rootMargin:'0px 0px -30px 0px'});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+/* ---------- cart ---------- */
+let cart = 2;
+const countEl = document.getElementById('cartCount');
+function bump(){
+  cart++;
+  countEl.textContent = cart;
+  document.getElementById('cartBtn').setAttribute('aria-label', `Cart, ${cart} items`);
+  countEl.classList.remove('pop'); void countEl.offsetWidth; countEl.classList.add('pop');
+}
+document.querySelectorAll('.add').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    bump();
+    const orig = btn.textContent;
+    btn.textContent = 'Added to cart ✓';
+    btn.classList.add('added');
+    setTimeout(()=>{ btn.textContent = orig; btn.classList.remove('added'); },1600);
+  });
+});
+document.querySelectorAll('[data-plan]').forEach(btn=>{
+  btn.addEventListener('click',(e)=>{
+    e.preventDefault();
+    bump();
+    const orig = btn.textContent;
+    btn.textContent = 'Added ✓';
+    setTimeout(()=>{ btn.textContent = orig; },1600);
+  });
+});
+
+/* ---------- newsletter ---------- */
+document.getElementById('newsForm').addEventListener('submit',(e)=>{
+  e.preventDefault();
+  const form = e.currentTarget;
+  form.classList.add('done');
+  form.innerHTML = '<input disabled value="Lovely — see you in the letter." style="text-align:center;font-style:italic">';
+});
+
+/* ---------- footer year ---------- */
+document.getElementById('year').textContent = new Date().getFullYear();
+</script>
+</body>
+</html>

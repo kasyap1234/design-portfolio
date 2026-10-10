@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Halden Studio — Architecture, København</title>
+<meta name="description" content="Halden is an architecture studio in Copenhagen practicing restraint — fewer walls, better light, honest material.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ivory:#F1EDE3;
+    --bone:#E7E2D4;
+    --bone-deep:#DAD4C2;
+    --ink:#191712;
+    --ink-soft:#3A362C;
+    --mute:rgba(25,23,18,.52);
+    --line:rgba(25,23,18,.16);
+    --line-strong:rgba(25,23,18,.42);
+    --ivory-mute:rgba(241,237,227,.55);
+    --ivory-line:rgba(241,237,227,.22);
+    --gutter:clamp(20px,5.5vw,96px);
+    --serif:'Fraunces', Georgia, serif;
+    --mono:'IBM Plex Mono', 'Courier New', monospace;
+    --ease:cubic-bezier(.19,1,.22,1);
+  }
+
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+  html{
+    scroll-behavior:smooth;
+    scroll-padding-top:96px;
+  }
+
+  body{
+    background:var(--ivory);
+    color:var(--ink);
+    font-family:var(--serif);
+    font-weight:400;
+    line-height:1.4;
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+    overflow-x:hidden;
+  }
+
+  ::selection{background:var(--ink);color:var(--ivory)}
+
+  a{color:inherit;text-decoration:none}
+  a:focus-visible{outline:1px solid currentColor;outline-offset:5px}
+
+  /* ---------- atmosphere: faint third-grid + grain ---------- */
+  .gridlines{position:fixed;inset:0;pointer-events:none;z-index:0}
+  .gridlines i{position:absolute;top:0;bottom:0;width:1px;background:rgba(25,23,18,.055)}
+  .gridlines i:nth-child(1){left:33.333%}
+  .gridlines i:nth-child(2){left:66.666%}
+
+  body::after{
+    content:"";position:fixed;inset:-2%;z-index:90;pointer-events:none;opacity:.05;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  main{position:relative;z-index:1}
+
+  /* ---------- shared bits ---------- */
+  .wrap{padding-left:var(--gutter);padding-right:var(--gutter)}
+
+  .mono{
+    font-family:var(--mono);
+    font-size:11px;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    font-weight:400;
+  }
+
+  .s-label{
+    display:flex;align-items:center;gap:14px;
+    color:var(--mute);
+  }
+  .s-label::before{content:"";width:6px;height:6px;background:var(--ink);flex:none}
+  .on-dark .s-label::before{background:var(--ivory)}
+
+  .rule{height:1px;background:var(--line);transform-origin:left;
+    transform:scaleX(0);transition:transform 1.4s var(--ease)}
+  .is-in .rule,.rule.is-in{transform:scaleX(1)}
+
+  [data-reveal]{
+    opacity:0;transform:translateY(26px);
+    transition:opacity 1.1s var(--ease),transform 1.1s var(--ease);
+    transition-delay:var(--d,0ms);
+  }
+  [data-reveal].is-in{opacity:1;transform:translateY(0)}
+
+  /* rules draw horizontally instead of rising */
+  .rule[data-reveal]{transform:scaleX(0);transform-origin:left}
+  .rule[data-reveal].is-in{transform:scaleX(1)}
+
+  /* ---------- top bar ---------- */
+  header{
+    position:fixed;top:0;left:0;right:0;z-index:60;
+    display:flex;align-items:center;justify-content:space-between;
+    height:68px;padding:0 var(--gutter);
+    background:var(--ivory);
+    border-bottom:1px solid var(--line);
+  }
+  .brand{font-family:var(--mono);font-size:13px;letter-spacing:.34em;text-transform:uppercase;font-weight:500}
+  .brand em{font-style:normal;color:var(--mute);letter-spacing:.2em}
+  nav{display:flex;gap:clamp(20px,3.4vw,52px)}
+  nav a{
+    font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--ink);position:relative;padding:4px 0;
+  }
+  nav a::after{
+    content:"";position:absolute;left:0;bottom:0;height:1px;width:100%;
+    background:var(--ink);transform:scaleX(0);transform-origin:right;
+    transition:transform .5s var(--ease);
+  }
+  nav a:hover::after{transform:scaleX(1);transform-origin:left}
+
+  /* ---------- hero ---------- */
+  .hero{
+    min-height:100vh;
+    min-height:100svh;
+    display:flex;flex-direction:column;justify-content:flex-end;
+    padding-top:120px;
+    padding-bottom:clamp(28px,4.5vh,56px);
+  }
+  .hero-meta{
+    display:flex;justify-content:space-between;align-items:baseline;
+    color:var(--mute);
+    padding-bottom:clamp(18px,3vh,34px);
+    border-bottom:1px solid var(--line);
+    margin-bottom:auto;
+  }
+  h1{
+    font-weight:340;
+    font-size:clamp(66px,12.6vw,188px);
+    line-height:.93;
+    letter-spacing:-.022em;
+    font-variation-settings:"opsz" 144;
+    margin-top:auto;
+    padding-top:clamp(40px,8vh,120px);
+  }
+  h1 .l2{display:block;padding-left:clamp(34px,9vw,190px)}
+  h1 em{font-style:italic;font-weight:330}
+  .hero-foot{
+    display:flex;justify-content:space-between;align-items:flex-end;gap:40px;
+    margin-top:clamp(36px,7vh,88px);
+  }
+  .manifesto{
+    max-width:34ch;
+    font-size:clamp(15px,1.25vw,18px);
+    line-height:1.55;
+    color:var(--ink-soft);
+    margin-left:auto;text-align:left;
+  }
+  .manifesto em{font-style:italic}
+  .scroll-cue{display:flex;align-items:center;gap:16px;color:var(--mute);flex:none}
+  .scroll-cue .stem{width:1px;height:52px;background:var(--line-strong);position:relative;overflow:hidden}
+  .scroll-cue .stem::after{
+    content:"";position:absolute;left:0;top:-100%;width:100%;height:100%;
+    background:var(--ink);animation:drip 2.4s var(--ease) infinite;
+  }
+  @keyframes drip{0%{top:-100%}55%{top:0}100%{top:100%}}
+
+  /* ---------- work ---------- */
+  section{padding:clamp(88px,15vh,180px) 0}
+  .sec-head{
+    display:flex;justify-content:space-between;align-items:baseline;
+    padding-bottom:clamp(20px,3vh,36px);
+  }
+  .sec-head .count{color:var(--mute)}
+
+  .work-list{list-style:none;border-bottom:1px solid var(--line)}
+  .work{border-top:1px solid var(--line)}
+  .work-row{
+    display:grid;
+    grid-template-columns:64px 1fr auto;
+    align-items:baseline;
+    gap:clamp(16px,3vw,48px);
+    padding:clamp(26px,4.2vh,44px) 0;
+    transition:opacity .5s var(--ease);
+    cursor:pointer;
+  }
+  .work-list:hover .work-row{opacity:.32}
+  .work-list .work-row:hover{opacity:1}
+  .w-idx{color:var(--mute)}
+  .w-name{
+    font-size:clamp(34px,4.8vw,72px);
+    font-weight:400;line-height:1;
+    letter-spacing:-.015em;
+    font-variation-settings:"opsz" 144;
+    transition:transform .7s var(--ease),font-style .3s;
+  }
+  .work-row:hover .w-name{font-style:italic;transform:translateX(14px)}
+  .w-meta{
+    display:flex;gap:clamp(14px,2vw,30px);color:var(--mute);
+    white-space:nowrap;
+  }
+  .w-meta .w-year{color:var(--ink)}
+
+  /* ---------- thumbnails (pure CSS massing studies) ---------- */
+  .thumb{position:relative;overflow:hidden;background:var(--bone);aspect-ratio:4/5}
+  .thumb i{position:absolute;display:block;background:var(--ink)}
+  .thumb i.lt{background:var(--ivory)}
+  .thumb i.mid{background:var(--bone-deep)}
+
+  /* Kern House — tower + plinth */
+  .t-kern i:nth-child(1){left:30%;top:12%;width:32%;height:64%}
+  .t-kern i:nth-child(2){left:13%;top:76%;width:74%;height:9%}
+  .t-kern i:nth-child(3){left:44%;top:20%;width:2px;height:36%;background:var(--ivory)}
+  /* Brygge Bathhouse — deck over water */
+  .t-brygge i:nth-child(1){left:0;bottom:0;width:100%;height:33%;background:var(--bone-deep)}
+  .t-brygge i:nth-child(2){left:11%;top:47%;width:78%;height:4.5%}
+  .t-brygge i:nth-child(3){left:26%;top:51.5%;width:2px;height:15.5%}
+  .t-brygge i:nth-child(4){left:70%;top:51.5%;width:2px;height:15.5%}
+  .t-brygge i:nth-child(5){left:56%;top:31%;width:15%;height:16%}
+  /* Anneberg Pavilion — cantilever roof */
+  .t-anneberg i:nth-child(1){left:7%;top:20%;width:86%;height:5%}
+  .t-anneberg i:nth-child(2){left:19%;top:25%;width:2px;height:55%}
+  .t-anneberg i:nth-child(3){left:79%;top:25%;width:2px;height:55%}
+  .t-anneberg i:nth-child(4){left:32%;top:50%;width:24%;height:30%;background:var(--bone-deep)}
+  .t-anneberg i:nth-child(5){left:7%;top:80%;width:86%;height:1px}
+  /* Sømark Chapel — monolith + light slit */
+  .t-somark i:nth-child(1){left:29%;top:9%;width:45%;height:71%}
+  .t-somark i:nth-child(2){left:59%;top:17%;width:2px;height:50%;background:var(--ivory)}
+  .t-somark i:nth-child(3){left:9%;top:80%;width:82%;height:1px}
+
+  /* thumbs live inside rows for small screens only */
+  .work-row .thumb{display:none;width:100%;margin-top:18px}
+
+  /* ---------- floating preview ---------- */
+  #preview{
+    position:fixed;left:0;top:0;z-index:70;
+    width:clamp(220px,20vw,300px);
+    aspect-ratio:4/5;
+    pointer-events:none;
+    opacity:0;
+    transition:opacity .45s var(--ease);
+    border:1px solid var(--line);
+    will-change:transform;
+  }
+  #preview.on{opacity:1}
+  #preview .thumb{position:absolute;inset:0;opacity:0;transition:opacity .4s ease}
+  #preview .thumb.on{opacity:1}
+  #preview::after{
+    content:attr(data-cap);
+    position:absolute;left:0;right:0;bottom:-1px;
+    transform:translateY(100%);
+    font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--ivory);background:var(--ink);
+    padding:6px 10px;
+  }
+  @media (hover:none),(pointer:coarse){#preview{display:none}}
+
+  /* ---------- studio ---------- */
+  .studio-statement{
+    font-size:clamp(34px,5.1vw,80px);
+    font-weight:350;line-height:1.06;letter-spacing:-.018em;
+    font-variation-settings:"opsz" 144;
+    max-width:14ch;
+    margin:clamp(48px,9vh,110px) 0 clamp(64px,11vh,130px);
+  }
+  .studio-statement em{font-style:italic}
+  .principles{
+    margin-left:clamp(0px,26vw,560px);
+    border-bottom:1px solid var(--line);
+  }
+  .principle{
+    display:grid;
+    grid-template-columns:64px minmax(140px,.9fr) 1.4fr;
+    gap:clamp(16px,3vw,48px);
+    align-items:baseline;
+    padding:clamp(22px,3.4vh,34px) 0;
+    border-top:1px solid var(--line);
+  }
+  .p-idx{color:var(--mute)}
+  .p-title{font-size:clamp(19px,1.7vw,25px);font-weight:400;letter-spacing:-.01em}
+  .p-desc{font-size:15px;line-height:1.6;color:var(--ink-soft);font-style:italic}
+  .team{
+    margin-left:clamp(0px,26vw,560px);
+    margin-top:clamp(40px,7vh,80px);
+    display:flex;justify-content:space-between;gap:32px;flex-wrap:wrap;
+  }
+  .team .mono{color:var(--mute);line-height:2}
+  .team .who{font-size:15px;font-style:italic;color:var(--ink-soft);text-align:right}
+
+  /* ---------- footer ---------- */
+  footer{
+    background:var(--ink);color:var(--ivory);
+    padding:clamp(80px,13vh,150px) 0 clamp(28px,4vh,44px);
+    position:relative;z-index:1;
+  }
+  footer .s-label{color:var(--ivory-mute)}
+  .foot-lede{
+    font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--ivory-mute);
+    margin:clamp(56px,10vh,120px) 0 8px;
+  }
+  .mail{
+    display:inline-block;
+    font-size:clamp(36px,7vw,110px);
+    font-weight:340;letter-spacing:-.02em;line-height:1.05;
+    font-variation-settings:"opsz" 144;
+    position:relative;
+  }
+  .mail em{font-style:italic}
+  .mail::after{
+    content:"";position:absolute;left:0;bottom:-6px;height:1px;width:100%;
+    background:var(--ivory);transform:scaleX(0);transform-origin:right;
+    transition:transform .8s var(--ease);
+  }
+  .mail:hover::after{transform:scaleX(1);transform-origin:left}
+  .foot-grid{
+    display:flex;justify-content:space-between;align-items:flex-end;gap:32px;flex-wrap:wrap;
+    margin-top:clamp(64px,11vh,130px);
+    padding-top:clamp(24px,4vh,36px);
+    border-top:1px solid var(--ivory-line);
+  }
+  .foot-grid .mono{color:var(--ivory-mute);line-height:2.1}
+  .foot-grid .mono b{font-weight:400;color:var(--ivory)}
+  .top-link{color:var(--ivory)}
+
+  /* ---------- responsive ---------- */
+  @media (max-width:900px){
+    .gridlines{display:none}
+  }
+  @media (max-width:760px){
+    header{height:58px}
+    .brand{font-size:11px;letter-spacing:.26em}
+    nav{gap:18px}
+    nav a{font-size:10px;letter-spacing:.12em}
+    .hero{padding-top:96px}
+    h1{font-size:clamp(52px,16.5vw,120px)}
+    h1 .l2{padding-left:clamp(20px,8vw,64px)}
+    .hero-foot{flex-direction:column;align-items:flex-start;gap:32px}
+    .manifesto{margin-left:0}
+    .work-row{
+      grid-template-columns:1fr auto;
+      grid-template-areas:"idx meta" "name name" "thumb thumb";
+      row-gap:10px;
+    }
+    .w-idx{grid-area:idx}
+    .w-name{grid-area:name;font-size:clamp(38px,11vw,64px)}
+    .w-meta{grid-area:meta}
+    .w-meta .w-type{display:none}
+    .work-row .thumb{display:block;grid-area:thumb;max-width:62%}
+    .principle{grid-template-columns:48px 1fr;grid-template-areas:"idx title" "idx desc"}
+    .p-idx{grid-area:idx}
+    .p-title{grid-area:title}
+    .p-desc{grid-area:desc}
+    .principles,.team{margin-left:0}
+    .team{flex-direction:column}
+    .team .who{text-align:left}
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto}
+    *,*::before,*::after{animation-duration:.01ms !important;transition-duration:.01ms !important}
+    [data-reveal]{opacity:1;transform:none}
+    .rule{transform:scaleX(1)}
+  }
+</style>
+  <noscript><style>.reveal,.a,[data-reveal]{opacity:1!important;transform:none!important}</style></noscript>
+</head>
+<body>
+
+<div class="gridlines" aria-hidden="true"><i></i><i></i></div>
+
+<header>
+  <a class="brand" href="#top">Halden<em>&thinsp;/&thinsp;Studio</em></a>
+  <nav>
+    <a href="#work">Work</a>
+    <a href="#studio">Studio</a>
+    <a href="#contact">Contact</a>
+  </nav>
+</header>
+
+<div id="preview" aria-hidden="true" data-cap="Massing study"></div>
+
+<main id="top">
+
+  <!-- HERO -->
+  <section class="hero wrap">
+    <div class="hero-meta mono" data-reveal>
+      <span>Est. 2014 — København</span>
+      <span>01 / Manifesto</span>
+    </div>
+
+    <h1 data-reveal style="--d:120ms">Space is the<br><span class="l2"><em>luxury</em>.</span></h1>
+
+    <div class="hero-foot" data-reveal style="--d:260ms">
+      <div class="scroll-cue mono" aria-hidden="true">
+        <span class="stem"></span>
+        <span>Scroll</span>
+      </div>
+      <p class="manifesto">Halden is an architecture studio in Copenhagen. We practice restraint — <em>fewer walls, better light, honest material.</em></p>
+    </div>
+  </section>
+
+  <!-- WORK -->
+  <section id="work" class="wrap">
+    <div class="sec-head" data-reveal>
+      <span class="s-label mono">02 / Selected Work</span>
+      <span class="count mono">(04)</span>
+    </div>
+    <div class="rule" data-reveal></div>
+
+    <ul class="work-list">
+      <li class="work" data-reveal>
+        <a class="work-row" href="#work" data-thumb="t-kern" data-cap="Kern House — massing study">
+          <span class="w-idx mono">01</span>
+          <span class="w-name">Kern House</span>
+          <span class="w-meta mono"><span class="w-type">Residential</span><span class="w-year">2024</span></span>
+          <span class="thumb t-kern" aria-hidden="true"><i></i><i></i><i></i></span>
+        </a>
+      </li>
+      <li class="work" data-reveal>
+        <a class="work-row" href="#work" data-thumb="t-brygge" data-cap="Brygge Bathhouse — deck plan">
+          <span class="w-idx mono">02</span>
+          <span class="w-name">Brygge Bathhouse</span>
+          <span class="w-meta mono"><span class="w-type">Public</span><span class="w-year">2023</span></span>
+          <span class="thumb t-brygge" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
+        </a>
+      </li>
+      <li class="work" data-reveal>
+        <a class="work-row" href="#work" data-thumb="t-anneberg" data-cap="Anneberg Pavilion — section">
+          <span class="w-idx mono">03</span>
+          <span class="w-name">Anneberg Pavilion</span>
+          <span class="w-meta mono"><span class="w-type">Cultural</span><span class="w-year">2022</span></span>
+          <span class="thumb t-anneberg" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
+        </a>
+      </li>
+      <li class="work" data-reveal>
+        <a class="work-row" href="#work" data-thumb="t-somark" data-cap="Sømark Chapel — monolith">
+          <span class="w-idx mono">04</span>
+          <span class="w-name">Sømark Chapel</span>
+          <span class="w-meta mono"><span class="w-type">Sacred</span><span class="w-year">2021</span></span>
+          <span class="thumb t-somark" aria-hidden="true"><i></i><i></i><i></i></span>
+        </a>
+      </li>
+    </ul>
+  </section>
+
+  <!-- STUDIO -->
+  <section id="studio" class="wrap">
+    <div class="sec-head" data-reveal>
+      <span class="s-label mono">03 / Studio</span>
+      <span class="count mono">Nordvest, KBH</span>
+    </div>
+    <div class="rule" data-reveal></div>
+
+    <h2 class="studio-statement" data-reveal style="--d:120ms">A building should hold <em>its silence.</em></h2>
+
+    <div class="principles">
+      <div class="principle" data-reveal>
+        <span class="p-idx mono">01</span>
+        <span class="p-title">Proportion before ornament</span>
+        <span class="p-desc">A room earns nothing it cannot hold.</span>
+      </div>
+      <div class="principle" data-reveal style="--d:100ms">
+        <span class="p-idx mono">02</span>
+        <span class="p-title">Material as found</span>
+        <span class="p-desc">Concrete, brick and timber, left to speak plainly.</span>
+      </div>
+      <div class="principle" data-reveal style="--d:200ms">
+        <span class="p-idx mono">03</span>
+        <span class="p-title">Light as structure</span>
+        <span class="p-desc">Daylight is drawn like a wall.</span>
+      </div>
+    </div>
+
+    <div class="team" data-reveal>
+      <p class="mono">Eleven architects, engineers &amp; model-makers<br>in a former print works, Nordvest</p>
+      <p class="who">Led by Mette Halden &amp; Jonas Rehling</p>
+    </div>
+  </section>
+
+</main>
+
+<!-- FOOTER -->
+<footer id="contact" class="on-dark">
+  <div class="wrap">
+    <span class="s-label mono" data-reveal>04 / Contact</span>
+
+    <p class="foot-lede" data-reveal>New commissions &amp; enquiries</p>
+    <a class="mail" href="mailto:studio@halden.dk" data-reveal style="--d:100ms"><em>studio</em>@halden.dk</a>
+
+    <div class="foot-grid" data-reveal style="--d:200ms">
+      <p class="mono"><b>Halden Studio ApS</b><br>Frederikssundsvej 118, 2700 Brønshøj<br>København, Denmark</p>
+      <p class="mono"><b>55.6761° N, 12.5683° E</b><br>UTC +1 — CPH</p>
+      <p class="mono"><a class="top-link" href="#top">↑&thinsp;Top</a><br>© 2025 Halden Studio ApS</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ---------- scroll reveals ---------- */
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var revealEls = document.querySelectorAll('[data-reveal]');
+
+  if (reduced || !('IntersectionObserver' in window)) {
+    revealEls.forEach(function(el){ el.classList.add('is-in'); });
+  } else {
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if (e.isIntersecting) {
+          e.target.classList.add('is-in');
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
+    revealEls.forEach(function(el){ io.observe(el); });
+  }
+
+  /* ---------- floating project preview ---------- */
+  var fine = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  var preview = document.getElementById('preview');
+  var rows = Array.prototype.slice.call(document.querySelectorAll('.work-row'));
+  if (!fine || !preview || !rows.length) return;
+
+  // Clone each row's CSS thumbnail into the preview stack for crossfading.
+  var thumbs = rows.map(function(row){
+    var t = row.querySelector('.thumb').cloneNode(true);
+    preview.appendChild(t);
+    return t;
+  });
+
+  var tx = 0, ty = 0, cx = 0, cy = 0, running = false;
+
+  function place(x, y){
+    var w = preview.offsetWidth, h = preview.offsetHeight;
+    var px = x + 30;
+    if (px + w + 24 > window.innerWidth) px = x - w - 30; // flip left of cursor
+    var py = Math.max(12, Math.min(window.innerHeight - h - 12, y - h / 2));
+    preview.style.transform = 'translate3d(' + px + 'px,' + py + 'px,0)';
+  }
+
+  function loop(){
+    cx += (tx - cx) * 0.16;
+    cy += (ty - cy) * 0.16;
+    place(cx, cy);
+    if (Math.abs(tx - cx) > 0.1 || Math.abs(ty - cy) > 0.1 || preview.classList.contains('on')) {
+      requestAnimationFrame(loop);
+    } else {
+      running = false;
+    }
+  }
+
+  function kick(){ if (!running) { running = true; requestAnimationFrame(loop); } }
+
+  rows.forEach(function(row, i){
+    row.addEventListener('mouseenter', function(e){
+      tx = e.clientX; ty = e.clientY;
+      thumbs.forEach(function(t, j){ t.classList.toggle('on', j === i); });
+      preview.setAttribute('data-cap', row.getAttribute('data-cap') || '');
+      preview.classList.add('on');
+      cx = tx; cy = ty; // snap on first reveal to avoid long glide-in
+      kick();
+    });
+    row.addEventListener('mouseleave', function(){
+      preview.classList.remove('on');
+    });
+    // prevent dead click on demo anchors
+    row.addEventListener('click', function(e){ e.preventDefault(); });
+  });
+
+  window.addEventListener('mousemove', function(e){
+    tx = e.clientX; ty = e.clientY;
+    kick();
+  }, { passive: true });
+})();
+</script>
+</body>
+</html>

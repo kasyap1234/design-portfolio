@@ -1,0 +1,620 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sable — Wine after dark</title>
+<meta name="description" content="Sable — a natural wine bar on Mercer Lane, London. Small plates, low-intervention bottles, candlelight. Thu–Sun, 18:00–late.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..700;1,6..96,400..700&family=Italiana&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+/* ----------------------------------------------------------
+   SABLE — natural wine · small plates · candlelight
+   Moody editorial: espresso ground, candlelight gold,
+   dusty rose, letterpress rules and hairline frames.
+---------------------------------------------------------- */
+:root{
+  --bg:        #161110;
+  --bg-card:   #1c1613;
+  --ink:       #ece0ca;
+  --ink-soft:  #cfc0a6;
+  --ink-dim:   #a8977f;
+  --muted:     #7f6f5c;
+  --gold:      #c9a15c;
+  --gold-soft: rgba(201,161,92,.62);
+  --gold-line: rgba(201,161,92,.30);
+  --gold-faint:rgba(201,161,92,.16);
+  --rose:      #cf9791;
+  --serif:     'Italiana', 'Didot', serif;
+  --roman:     'Bodoni Moda', 'Didot', serif;
+  --sans:      'Jost', 'Futura', sans-serif;
+}
+
+*,*::before,*::after{ box-sizing:border-box; margin:0; padding:0; }
+html{ scroll-behavior:smooth; }
+body{
+  background:var(--bg);
+  color:var(--ink);
+  font-family:var(--roman);
+  font-weight:400;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+  overflow-x:hidden;
+  min-height:100vh;
+}
+
+::selection{ background:rgba(201,161,92,.30); color:#f6eed9; }
+a{ color:inherit; text-decoration:none; }
+a:focus-visible, button:focus-visible{ outline:1px solid var(--gold); outline-offset:5px; }
+img,svg{ display:block; }
+
+/* ---------- atmosphere: candle-glow, vignette, grain ---------- */
+.glow{
+  position:fixed; inset:0; z-index:1; pointer-events:none;
+  background:
+    radial-gradient(60% 42% at 50% 108%, rgba(201,161,92,.13), transparent 62%),
+    radial-gradient(90% 60% at 50% -14%, rgba(201,161,92,.07), transparent 60%);
+}
+.vignette{
+  position:fixed; inset:0; z-index:52; pointer-events:none;
+  background:radial-gradient(125% 95% at 50% 38%, transparent 52%, rgba(9,6,4,.58) 100%);
+}
+.grain{
+  position:fixed; inset:0; z-index:53; pointer-events:none;
+  opacity:.075; mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ---------- vertical edge label ---------- */
+.edge-label{
+  position:fixed; left:1.15rem; top:50%; z-index:40;
+  transform:translateY(-50%);
+  writing-mode:vertical-rl;
+  font-family:var(--sans); font-weight:300;
+  font-size:.58rem; letter-spacing:.52em; text-transform:uppercase;
+  color:var(--muted); white-space:nowrap;
+}
+.edge-label::before{
+  content:""; display:block; width:1px; height:64px;
+  background:var(--gold-line); margin:0 auto 1.4rem;
+}
+.edge-label b{ font-weight:400; color:var(--gold-soft); }
+
+/* ---------- shared bits ---------- */
+.wrap{ max-width:62rem; margin:0 auto; padding:0 clamp(1.25rem,4vw,3rem); position:relative; z-index:2; }
+
+.scaps{
+  font-family:var(--sans); font-weight:400;
+  text-transform:uppercase; letter-spacing:.42em;
+  font-size:.66rem; color:var(--gold);
+}
+
+.orn{ display:flex; align-items:center; gap:.9rem; }
+.orn::before,.orn::after{ content:""; flex:1; height:1px; background:var(--gold-line); }
+.orn i{
+  width:7px; height:7px; flex:none;
+  border:1px solid var(--gold-soft); transform:rotate(45deg);
+}
+
+.rule-double{ height:4px; border-top:1px solid var(--gold-line); border-bottom:1px solid var(--gold-line); }
+
+/* ---------- nav ---------- */
+.nav{
+  position:relative; z-index:30;
+  border-bottom:1px solid rgba(201,161,92,.18);
+}
+.nav-in{
+  max-width:80rem; margin:0 auto;
+  padding:1.15rem clamp(1.25rem,4vw,3rem) 1.05rem;
+  display:flex; align-items:baseline; justify-content:space-between; gap:1rem;
+}
+.wordmark{
+  font-family:var(--serif); font-size:1.3rem;
+  letter-spacing:.42em; text-transform:uppercase; color:var(--ink);
+  padding-left:.42em; /* optically recenter letterspaced caps */
+}
+.nav-hours{
+  font-family:var(--sans); font-weight:300; font-size:.62rem;
+  letter-spacing:.34em; text-transform:uppercase; color:var(--muted);
+}
+.res-link{
+  font-family:var(--sans); font-weight:400; font-size:.66rem;
+  letter-spacing:.32em; text-transform:uppercase; color:var(--ink-soft);
+  position:relative; padding:.35em 0;
+  transition:color .45s ease;
+}
+.res-link::before{
+  content:""; display:inline-block; width:5px; height:5px;
+  border:1px solid var(--gold-soft); transform:rotate(45deg) translateY(-1px);
+  margin-right:.9em; opacity:0; transition:opacity .45s ease;
+}
+.res-link::after{
+  content:""; position:absolute; left:0; right:0; bottom:0;
+  height:1px; background:var(--gold);
+  transform:scaleX(0); transform-origin:right;
+  transition:transform .55s cubic-bezier(.22,.61,.36,1);
+}
+.res-link:hover{ color:var(--gold); }
+.res-link:hover::before{ opacity:1; }
+.res-link:hover::after{ transform:scaleX(1); transform-origin:left; }
+
+/* ---------- hero ---------- */
+.hero{
+  position:relative; z-index:2; text-align:center;
+  min-height:82vh; display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+  padding:4rem 1.5rem 5rem;
+}
+.hero::before{ /* light pooling on the floor beneath the word */
+  content:""; position:absolute; left:50%; bottom:-4%;
+  width:min(58rem,92vw); height:22rem;
+  transform:translateX(-50%);
+  background:radial-gradient(50% 50% at 50% 50%, rgba(201,161,92,.10), transparent 70%);
+  pointer-events:none;
+}
+.hero-eyebrow{ margin-bottom:2.2rem; }
+.hero-eyebrow .sep{ color:var(--muted); padding:0 .35em; }
+
+.hero h1{
+  font-family:var(--serif); font-weight:400;
+  font-size:clamp(6rem,23vw,17rem);
+  line-height:.86; letter-spacing:.015em;
+  color:var(--ink);
+  text-shadow:0 0 90px rgba(201,161,92,.20), 0 2px 30px rgba(0,0,0,.45);
+}
+.hero-sub{
+  font-family:var(--roman); font-style:italic; font-weight:400;
+  font-size:clamp(1.5rem,3.6vw,2.6rem);
+  color:var(--rose);
+  margin-top:-.32em; padding-left:clamp(2rem,16vw,14rem);
+  position:relative; z-index:3;
+  text-shadow:0 2px 24px var(--bg);
+}
+.hero-meta{
+  margin-top:2.8rem;
+  font-family:var(--sans); font-weight:300;
+  font-size:.7rem; letter-spacing:.4em; text-transform:uppercase;
+  color:var(--ink-dim);
+  display:flex; flex-wrap:wrap; justify-content:center; gap:.4em 1.4em;
+}
+.hero-meta .dia{ width:4px; height:4px; border:1px solid var(--gold-soft); transform:rotate(45deg) translateY(.1em); align-self:center; }
+.hero-orn{ width:min(22rem,70vw); margin-top:2.6rem; }
+
+/* ---------- load-in ---------- */
+@keyframes rise{
+  from{ opacity:0; transform:translateY(22px); }
+  to{ opacity:1; transform:translateY(0); }
+}
+.a{ opacity:0; animation:rise 1.15s cubic-bezier(.19,.66,.3,1) forwards; }
+.a1{ animation-delay:.12s; } .a2{ animation-delay:.30s; }
+.a3{ animation-delay:.52s; } .a4{ animation-delay:.74s; }
+.a5{ animation-delay:.94s; }
+
+/* ---------- scroll reveal ---------- */
+.reveal{
+  opacity:0; transform:translateY(15px);
+  transition:opacity 1.05s ease, transform 1.05s cubic-bezier(.22,.61,.36,1);
+  transition-delay:var(--d,0s);
+}
+.reveal.in{ opacity:1; transform:none; }
+
+/* ---------- tonight's board ---------- */
+.board{ position:relative; margin:2rem auto 0; }
+.board-card{
+  position:relative; max-width:46rem; margin:0 auto;
+  background:linear-gradient(180deg, rgba(28,22,19,.72), rgba(24,19,16,.88));
+  border:1px solid var(--gold-line);
+  padding:clamp(2.4rem,6vw,4.6rem) clamp(1.5rem,6vw,4.4rem) clamp(2.4rem,5vw,3.8rem);
+  box-shadow:0 40px 90px -30px rgba(0,0,0,.7);
+}
+.board-card::before{ /* inner hairline — the double rule of a printed card */
+  content:""; position:absolute; inset:7px;
+  border:1px solid var(--gold-faint); pointer-events:none;
+}
+.seal{
+  position:absolute; top:0; left:50%; z-index:4;
+  transform:translate(-50%,-50%);
+  width:4.4rem; height:4.4rem; border-radius:50%;
+  border:1px solid var(--gold-line);
+  background:var(--bg);
+  display:grid; place-items:center;
+}
+.seal i{ width:11px; height:11px; border:1px solid var(--gold-soft); transform:rotate(45deg); }
+
+.board-head{ text-align:center; margin-bottom:3rem; }
+.board-head .over{ margin-bottom:1.3rem; }
+.board-head h2{
+  font-family:var(--serif); font-weight:400;
+  font-size:clamp(2.5rem,7vw,4.2rem); line-height:1.05;
+  letter-spacing:.02em; color:var(--ink);
+}
+.board-date{
+  margin-top:1.1rem;
+  font-family:var(--roman); font-style:italic;
+  font-size:.95rem; color:var(--ink-dim); letter-spacing:.04em;
+}
+.board-date b{ font-weight:400; color:var(--rose); }
+
+.group{ margin-top:3.1rem; }
+.group:first-of-type{ margin-top:2.2rem; }
+.group-label{
+  display:flex; align-items:center; gap:1.1rem; margin-bottom:1.9rem;
+}
+.group-label::before,.group-label::after{ content:""; flex:1; height:1px; background:rgba(201,161,92,.22); }
+.group-label span{ font-family:var(--sans); font-weight:400; font-size:.62rem; letter-spacing:.5em; text-transform:uppercase; color:var(--gold); padding-left:.5em; }
+
+.courses{ list-style:none; }
+.course{ padding:.55rem 0 .9rem; }
+.course .row{ display:flex; align-items:baseline; }
+.course h4{
+  font-family:var(--roman); font-weight:500;
+  font-size:1.02rem; letter-spacing:.045em; color:var(--ink);
+  transition:color .5s ease;
+}
+.course:hover h4{ color:var(--gold); }
+.dots{
+  flex:1 1 auto; min-width:1.4rem;
+  margin:0 .75em .3em;
+  border-bottom:1px dotted rgba(236,224,202,.22);
+}
+.price{
+  font-family:var(--serif); font-size:1.12rem; line-height:1;
+  color:var(--ink-soft); min-width:2ch; text-align:right;
+}
+.course p{
+  font-family:var(--roman); font-style:italic; font-weight:400;
+  font-size:.92rem; letter-spacing:.02em; color:var(--ink-dim);
+  margin-top:.15rem; max-width:34rem;
+}
+.board-foot{
+  margin-top:3.2rem; padding-top:1.4rem;
+  border-top:1px solid rgba(201,161,92,.18);
+  text-align:center;
+  font-family:var(--sans); font-weight:300;
+  font-size:.6rem; letter-spacing:.34em; text-transform:uppercase;
+  color:var(--muted);
+}
+
+/* ---------- wine note ---------- */
+.cellar{ padding:6.5rem 0 5.5rem; text-align:center; }
+.cellar .over{ margin-bottom:1.6rem; }
+.cellar h3{
+  font-family:var(--serif); font-weight:400;
+  font-size:clamp(1.9rem,4.6vw,2.7rem); color:var(--ink); letter-spacing:.03em;
+}
+.cellar-note{
+  max-width:36rem; margin:1.8rem auto 0;
+  font-family:var(--roman); font-style:italic;
+  font-size:1.02rem; line-height:1.9; letter-spacing:.02em;
+  color:var(--ink-soft); text-align:center;
+}
+.cellar-note::first-letter{
+  font-family:var(--serif); font-style:normal;
+  font-size:2.6em; line-height:.78;
+  float:left; padding:.08em .14em 0 0;
+  color:var(--gold);
+}
+.shelf{ list-style:none; margin-top:2.6rem; }
+.shelf li{ padding:.42rem 0; }
+.shelf b{
+  font-family:var(--serif); font-weight:400;
+  font-size:1.06rem; letter-spacing:.06em; color:var(--ink);
+}
+.shelf i{
+  font-family:var(--sans); font-style:normal; font-weight:300;
+  font-size:.6rem; letter-spacing:.32em; text-transform:uppercase;
+  color:var(--gold-soft); padding-left:1em;
+}
+.shelf li + li{ position:relative; }
+.shelf li + li::before{
+  content:""; position:absolute; top:0; left:50%;
+  width:3.2rem; height:1px; transform:translateX(-50%);
+  background:rgba(201,161,92,.18);
+}
+
+/* ---------- reservations ---------- */
+.reserve{ padding:4.5rem 0 5rem; text-align:center; }
+.reserve .frame{ border-top:4px double var(--gold-line); border-bottom:4px double var(--gold-line); padding:3.4rem 1.5rem 3.2rem; }
+.reserve h3{
+  font-family:var(--serif); font-weight:400;
+  font-size:clamp(1.7rem,4vw,2.4rem); letter-spacing:.04em; color:var(--ink);
+  margin-top:1.2rem;
+}
+.big-line{
+  display:inline-block; margin-top:1.6rem;
+  font-family:var(--serif);
+  font-size:clamp(1.9rem,5.6vw,3.3rem); letter-spacing:.06em;
+  color:var(--ink); position:relative;
+  transition:color .5s ease;
+}
+.big-line::after{
+  content:""; position:absolute; left:8%; right:8%; bottom:-.14em;
+  height:1px; background:var(--gold);
+  transform:scaleX(0); transition:transform .6s cubic-bezier(.22,.61,.36,1);
+}
+.big-line:hover{ color:var(--gold); }
+.big-line:hover::after{ transform:scaleX(1); }
+.mail-line{
+  display:block; margin-top:1.4rem;
+  font-family:var(--roman); font-style:italic;
+  font-size:1.05rem; color:var(--rose); letter-spacing:.05em;
+  transition:color .5s ease;
+}
+.mail-line:hover{ color:var(--ink); }
+.walkin{
+  margin:2.1rem auto 0; max-width:30rem;
+  font-family:var(--sans); font-weight:300;
+  font-size:.66rem; letter-spacing:.3em; text-transform:uppercase;
+  color:var(--ink-dim); line-height:2.2;
+}
+.walkin b{ font-weight:400; color:var(--gold-soft); }
+
+/* ---------- footer ---------- */
+.foot{ border-top:1px solid rgba(201,161,92,.18); padding:3rem 0 2.6rem; position:relative; z-index:2; }
+.foot-grid{
+  display:flex; justify-content:space-between; align-items:flex-start;
+  gap:2rem; flex-wrap:wrap;
+}
+.foot-col .lbl{
+  font-family:var(--sans); font-weight:400; font-size:.56rem;
+  letter-spacing:.42em; text-transform:uppercase; color:var(--gold);
+  margin-bottom:.9rem;
+}
+.foot-col p, .foot-col a{
+  font-family:var(--roman); font-style:italic;
+  font-size:.92rem; color:var(--ink-dim); line-height:1.8; letter-spacing:.03em;
+}
+.foot-col a{ transition:color .4s ease; }
+.foot-col a:hover{ color:var(--gold); }
+.foot-col:nth-child(2){ text-align:center; }
+.foot-col:nth-child(3){ text-align:right; }
+.foot-base{
+  margin-top:2.8rem; display:flex; align-items:center; gap:1.2rem;
+  font-family:var(--sans); font-weight:300; font-size:.56rem;
+  letter-spacing:.4em; text-transform:uppercase; color:var(--muted);
+}
+.foot-base::before,.foot-base::after{ content:""; flex:1; height:1px; background:rgba(201,161,92,.14); }
+.foot-base i{ width:5px; height:5px; border:1px solid var(--gold-line); transform:rotate(45deg); flex:none; }
+
+/* ---------- responsive ---------- */
+@media (max-width:64rem){
+  .edge-label{ display:none; }
+}
+@media (max-width:46rem){
+  .nav-hours{ display:none; }
+  .hero{ min-height:74vh; padding-top:3rem; }
+  .hero-sub{ padding-left:18vw; }
+  .foot-grid{ flex-direction:column; align-items:center; text-align:center; gap:2.2rem; }
+  .foot-col:nth-child(3){ text-align:center; }
+}
+@media (max-width:30rem){
+  .wordmark{ font-size:1.05rem; letter-spacing:.32em; }
+  .res-link{ font-size:.58rem; letter-spacing:.24em; }
+  .course h4{ font-size:.95rem; }
+  .dots{ margin:0 .55em .3em; }
+}
+
+/* ---------- reduced motion ---------- */
+@media (prefers-reduced-motion:reduce){
+  html{ scroll-behavior:auto; }
+  *,*::before,*::after{ animation:none!important; transition:none!important; }
+  .a,.reveal{ opacity:1!important; transform:none!important; }
+}
+</style>
+  <noscript><style>.reveal,.a,[data-reveal]{opacity:1!important;transform:none!important}</style></noscript>
+</head>
+<body>
+
+<div class="glow" aria-hidden="true"></div>
+<div class="vignette" aria-hidden="true"></div>
+<div class="grain" aria-hidden="true"></div>
+
+<p class="edge-label" aria-hidden="true"><b>Sable</b>&nbsp;&nbsp;natural wine&nbsp;&nbsp;·&nbsp;&nbsp;small plates&nbsp;&nbsp;·&nbsp;&nbsp;14 Mercer Lane, London</p>
+
+<header class="nav">
+  <div class="nav-in">
+    <a class="wordmark" href="#top" aria-label="Sable — home">Sable</a>
+    <p class="nav-hours">Thu–Sun · 18:00–Late</p>
+    <a class="res-link" href="#reserve">Reserve a table</a>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- ============ HERO ============ -->
+  <section class="hero" aria-labelledby="hero-title">
+    <p class="hero-eyebrow scaps a a1"><span style="white-space:nowrap">Natural wine</span><span class="sep">·</span><span style="white-space:nowrap">Small plates</span><span class="sep">·</span><span style="white-space:nowrap">Est. MMXXIV</span></p>
+    <h1 id="hero-title" class="a a2">Sable</h1>
+    <p class="hero-sub a a3">wine after dark.</p>
+    <div class="hero-meta a a4">
+      <span>Thu–Sun</span><span class="dia" aria-hidden="true"></span>
+      <span>18:00–Late</span><span class="dia" aria-hidden="true"></span>
+      <span>14 Mercer Lane, London E8</span>
+    </div>
+    <div class="orn hero-orn a a5" aria-hidden="true"><i></i></div>
+  </section>
+
+  <!-- ============ TONIGHT'S BOARD ============ -->
+  <section class="board wrap" aria-labelledby="board-title">
+    <div class="board-card reveal">
+      <div class="seal" aria-hidden="true"><i></i></div>
+
+      <div class="board-head">
+        <p class="over scaps">Chalked nightly</p>
+        <h2 id="board-title">Tonight’s Board</h2>
+        <p class="board-date"><b id="board-date">this evening</b> — until the candles burn low</p>
+      </div>
+
+      <div class="group">
+        <p class="group-label"><span>Small plates</span></p>
+        <ul class="courses">
+          <li class="course reveal">
+            <div class="row"><h4>Sourdough &amp; smoked butter</h4><span class="dots"></span><span class="price">6</span></div>
+            <p>baked at dawn, whipped fat, sea salt</p>
+          </li>
+          <li class="course reveal">
+            <div class="row"><h4>Marinated olives</h4><span class="dots"></span><span class="price">7</span></div>
+            <p>orange peel, thyme, warm from the pan</p>
+          </li>
+          <li class="course reveal">
+            <div class="row"><h4>Cured sea trout</h4><span class="dots"></span><span class="price">13</span></div>
+            <p>fennel pollen, crème fraîche, rye crisp</p>
+          </li>
+          <li class="course reveal">
+            <div class="row"><h4>Beef tartare</h4><span class="dots"></span><span class="price">14</span></div>
+            <p>cured yolk, smoked shallot, sourdough</p>
+          </li>
+          <li class="course reveal">
+            <div class="row"><h4>Charred leeks</h4><span class="dots"></span><span class="price">11</span></div>
+            <p>romesco, hazelnut, sherry caramel</p>
+          </li>
+          <li class="course reveal">
+            <div class="row"><h4>Burrata</h4><span class="dots"></span><span class="price">12</span></div>
+            <p>quince, basil oil, toasted seed</p>
+          </li>
+        </ul>
+      </div>
+
+      <div class="group">
+        <p class="group-label"><span>Larger</span></p>
+        <ul class="courses">
+          <li class="course reveal">
+            <div class="row"><h4>Duck leg</h4><span class="dots"></span><span class="price">24</span></div>
+            <p>burnt endive, quince jus, thyme</p>
+          </li>
+          <li class="course reveal">
+            <div class="row"><h4>Monkfish</h4><span class="dots"></span><span class="price">27</span></div>
+            <p>brown butter, caper, charred lemon</p>
+          </li>
+          <li class="course reveal">
+            <div class="row"><h4>Bavette</h4><span class="dots"></span><span class="price">25</span></div>
+            <p>bone-marrow butter, watercress, fries</p>
+          </li>
+          <li class="course reveal">
+            <div class="row"><h4>Celeriac pithivier</h4><span class="dots"></span><span class="price">26</span></div>
+            <p>black garlic, truffle jus — for two to share</p>
+          </li>
+        </ul>
+      </div>
+
+      <div class="group">
+        <p class="group-label"><span>Sweets</span></p>
+        <ul class="courses">
+          <li class="course reveal">
+            <div class="row"><h4>Dark chocolate &amp; olive oil</h4><span class="dots"></span><span class="price">9</span></div>
+            <p>sea salt, amaretti</p>
+          </li>
+          <li class="course reveal">
+            <div class="row"><h4>Burnt-honey panna cotta</h4><span class="dots"></span><span class="price">8</span></div>
+            <p>bee pollen, shortbread</p>
+          </li>
+          <li class="course reveal">
+            <div class="row"><h4>Three cheeses</h4><span class="dots"></span><span class="price">12</span></div>
+            <p>quince, walnut, oatcake</p>
+          </li>
+        </ul>
+      </div>
+
+      <p class="board-foot">The board changes with the market — priced in £</p>
+    </div>
+  </section>
+
+  <!-- ============ WINE NOTE ============ -->
+  <section class="cellar wrap" aria-labelledby="cellar-title">
+    <p class="over scaps reveal">The cellar</p>
+    <h3 id="cellar-title" class="reveal">Low wine, poured slow.</h3>
+    <p class="cellar-note reveal">Our cellar is small and restless — bottles farmed organically,
+      fermented with native yeasts, and left unfined and unfiltered. They arrive
+      cloudy, alive, and occasionally unpredictable. We like them that way.</p>
+    <ul class="shelf">
+      <li class="reveal"><b>Gut Oggau ‘Atanasius’</b><i>Burgenland</i></li>
+      <li class="reveal"><b>Partida Creus ‘SP’ Sumoll</b><i>Penedès</i></li>
+      <li class="reveal"><b>Frank Cornelissen ‘Susucaru’</b><i>Etna</i></li>
+      <li class="reveal"><b>Meinklang ‘Graupert’</b><i>Burgenland</i></li>
+    </ul>
+  </section>
+
+  <!-- ============ RESERVATIONS ============ -->
+  <section class="reserve wrap" id="reserve" aria-labelledby="res-title">
+    <div class="frame reveal">
+      <p class="scaps">Reservations</p>
+      <h3 id="res-title">A table, held for the evening.</h3>
+      <a class="big-line" href="tel:+442079460818">+44 20 7946 0818</a>
+      <a class="mail-line" href="mailto:table@sable.wine">table@sable.wine</a>
+      <p class="walkin">Parties of five or fewer only<br>
+        Walk-ins taken at the bar — <b>two stools kept for the unplanned</b></p>
+    </div>
+  </section>
+
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="foot">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-col">
+        <p class="lbl">Find us</p>
+        <p>14 Mercer Lane<br>London Fields, London E8</p>
+      </div>
+      <div class="foot-col">
+        <p class="lbl">Elsewhere</p>
+        <p><a href="https://instagram.com/sable.wine" rel="noopener">@sable.wine</a><br>word travels; we don’t advertise</p>
+      </div>
+      <div class="foot-col">
+        <p class="lbl">Hours</p>
+        <p>Thursday–Sunday<br>18:00 until late</p>
+      </div>
+    </div>
+    <p class="foot-base"><i aria-hidden="true"></i>&nbsp;© MMXXV Sable — wine after dark&nbsp;<i aria-hidden="true"></i></p>
+  </div>
+</footer>
+
+<script>
+/* Restrained motion: courses are served one by one. */
+(function(){
+  'use strict';
+
+  /* stagger each dish within its section, like plates leaving the kitchen */
+  var lists = document.querySelectorAll('.courses');
+  lists.forEach(function(list){
+    Array.prototype.forEach.call(list.children, function(li, i){
+      li.style.setProperty('--d', (i * 0.09) + 's');
+    });
+  });
+  /* gentle cascade for cellar bottles */
+  var shelf = document.querySelector('.shelf');
+  if (shelf){
+    Array.prototype.forEach.call(shelf.children, function(li, i){
+      li.style.setProperty('--d', (i * 0.12) + 's');
+    });
+  }
+
+  if ('IntersectionObserver' in window){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if (entry.isIntersecting){
+          entry.target.classList.add('in');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
+    document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
+  } else {
+    document.querySelectorAll('.reveal').forEach(function(el){ el.classList.add('in'); });
+  }
+
+  /* tonight's date under the board heading */
+  var dateEl = document.getElementById('board-date');
+  if (dateEl){
+    try {
+      dateEl.textContent = new Date().toLocaleDateString('en-GB', {
+        weekday: 'long', day: 'numeric', month: 'long'
+      }).toLowerCase();
+    } catch (e) { /* keep fallback text */ }
+  }
+})();
+</script>
+</body>
+</html>
